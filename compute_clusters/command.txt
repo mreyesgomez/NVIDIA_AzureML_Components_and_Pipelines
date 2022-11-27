@@ -1,0 +1,1 @@
+az ml compute create -f create-cluster2.yml

@@ -1,0 +1,8 @@
+$schema: https://azuremlschemas.azureedge.net/latest/amlCompute.schema.json 
+name: gpu-cluster-standard-nc6s-v3
+type: amlcompute
+size: Standard_NC6s_v3
+min_instances: 0
+max_instances: 2
+idle_time_before_scale_down: 1200
+location: southcentralus
