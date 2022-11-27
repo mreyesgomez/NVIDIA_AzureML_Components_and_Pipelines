@@ -1,0 +1,19 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_detectnet_v2_download_model
+display_name: tao_detectnet_v2_download_model
+version: 1
+type: command
+inputs:
+  model_name:
+    type: string
+    default: pretrained_detectnet_v2:resnet18
+  model_subdir:
+    type: string
+    default: pretrained_resnet18
+outputs:
+  base_model_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./tao_detectnet_v2_download_model.sh ${{inputs.model_name}} ${{inputs.model_subdir}} ${{outputs.base_model_dir}}

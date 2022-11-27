@@ -1,0 +1,41 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_detectnet_v2_evaluate
+display_name: tao_detectnet_v2_evaluate
+version: 1
+type: command
+inputs:
+  data_dir:
+    type: uri_folder
+  base_model_dir:
+    type: uri_folder
+  tf_records_dir:
+    type: uri_folder
+  original_specs:
+    type: uri_folder
+  specs_file:
+    type: string
+    default: detectnet_v2_train_resnet18_kitti.txt
+  target_model_dir: 
+    type: uri_folder
+  key:
+    type: string
+    default: tlt_encode
+  model_name:
+    type: string
+    default: resnet18_detector
+  model_subfolder:
+    type: string
+    default: experiment_dir_unpruned
+  running_framework:
+    type: string
+    default: ND
+  use_training_set:
+    type: string
+    default: ND
+  gpu_index:
+    type: string
+    default: ND
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./update_and_evaluate.sh ${{inputs.original_specs}} ${{inputs.specs_file}} ${{inputs.data_dir}} ${{inputs.base_model_dir}} ${{inputs.tf_records_dir}} ${{inputs.key}} ${{inputs.model_name}} ${{inputs.model_subfolder}} ${{inputs.target_model_dir}} ${{inputs.running_framework}} ${{inputs.use_training_set}} ${{inputs.gpu_index}} 

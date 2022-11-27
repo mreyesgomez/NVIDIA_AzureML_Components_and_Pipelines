@@ -1,0 +1,26 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: download_images_and_labels
+display_name: download_images_and_labels
+version: 1
+type: command
+inputs:
+  url_images:
+    type: string
+    default: "https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip"
+  url_labels:
+    type: string
+    default: "https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip"
+  images_checksum:
+    type: string
+    default: '^351c5a2aa0cd9238b50174a3a62b846bc5855da256b82a196431d60ff8d43617$'
+  labels_checksum:
+    type: string
+    default: '^4efc76220d867e1c31bb980bbf8cbc02599f02a9cb4350effa98dbb04aaed880$' 
+outputs:
+  data_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./download_images_and_labels.sh ${{inputs.url_images}} ${{inputs.url_labels}} ${{inputs.images_checksum}} ${{inputs.labels_checksum}} ${{outputs.data_dir}}
+

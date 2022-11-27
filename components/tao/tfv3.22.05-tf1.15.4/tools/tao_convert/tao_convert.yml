@@ -1,0 +1,68 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_convert
+display_name: tao_convert
+version: 1
+type: command
+inputs:
+  model_type:
+    type: string
+    default: detectnet_v2 
+  etlt_model_dir:
+    type: uri_folder
+  etlt_model_name:
+    type: string
+    default: resnet18_detector
+  etlt_model_subfolder:
+    type: string
+    default: experiment_dir_final 
+  trt_model_name:
+    type: string
+    default: resnet18_detector
+  trt_model_subfolder:
+    type: string
+    default: experiment_dir_final
+  key:
+    type: string
+    default: tlt_encode
+  input_dimensions:
+    type: string
+    default: 3,384,1248 
+  output_nodes:
+    type: string
+    default: output_cov/Sigmoid,output_bbox/BiasAdd 
+  cal_cache_dir:
+    type: uri_folder
+  cal_cache_filename:
+    type: string
+    default: ND
+  cal_batch_size:
+    type: string
+    default: ND
+  max_batch_size:
+    type: string
+    default: ND
+  engine_datatype:
+    type: string
+    default: ND
+  max_workspace_size:
+    type: string
+    default: ND
+  input_dimension_ordering:
+    type: string
+    default: ND
+  optimization_profiles:
+    type: string
+    default: ND  
+  strict_type_constraints:
+    type: string
+    default: ND  
+  dla_core_index:
+    type: string
+    default: ND  
+outputs:
+  trt_model_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./tao_convert.sh ${{inputs.model_type}} ${{inputs.etlt_model_dir}} ${{inputs.etlt_model_name}} ${{inputs.etlt_model_subfolder}} ${{inputs.trt_model_name}} ${{inputs.trt_model_subfolder}} ${{outputs.trt_model_dir}} ${{inputs.key}} ${{inputs.input_dimensions}} ${{inputs.output_nodes}} ${{inputs.cal_cache_dir}} ${{inputs.cal_cache_filename}} ${{inputs.cal_batch_size}} ${{inputs.max_batch_size}} ${{inputs.engine_datatype}} ${{inputs.max_workspace_size}} ${{inputs.input_dimension_ordering}} ${{inputs.optimization_profiles}} ${{inputs.strict_type_constraints}} ${{inputs.dla_core_index}}

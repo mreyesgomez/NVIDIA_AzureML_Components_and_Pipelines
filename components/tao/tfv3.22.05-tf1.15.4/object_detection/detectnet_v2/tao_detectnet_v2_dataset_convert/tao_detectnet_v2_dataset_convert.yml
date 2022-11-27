@@ -1,0 +1,27 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_detectnet_v2_dataset_convert
+display_name: tao_detectnet_v2_dataset_convert
+version: 1
+type: command
+inputs:
+  specs_dir:
+    type: uri_folder
+  data_dir:
+    type: uri_folder
+  dataset_export_spec:
+    type: string
+    default: detectnet_v2_tfrecords_kitti_trainval.txt
+  output_filename:
+    type: string
+    default: kitti_trainval/kitti_trainval
+  validation_fold:
+    type: string
+    default: ND
+outputs:
+  tf_records_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./update_and_convert.sh ${{inputs.specs_dir}} ${{inputs.data_dir}} ${{inputs.dataset_export_spec}} ${{outputs.tf_records_dir}} ${{inputs.output_filename}} ${{inputs.validation_fold}} 
+

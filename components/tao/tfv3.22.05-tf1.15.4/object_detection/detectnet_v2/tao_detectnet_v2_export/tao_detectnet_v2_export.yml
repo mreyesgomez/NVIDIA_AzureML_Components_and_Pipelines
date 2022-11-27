@@ -1,0 +1,78 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_detectnet_v2_export
+display_name: tao_detectnet_v2_export
+version: 1
+type: command
+inputs:
+  source_model_dir:
+    type: uri_folder
+  source_subfolder:
+    type: string
+    default: experiment_dir_retrain
+  source_model_name:
+    type: string
+    default: resnet18_detector_pruned
+  exported_subfolder:
+    type: string
+    default: experiment_dir_final
+  exported_model_name:
+    type: string
+    default: resnet18_detector  
+  key:
+    type: string
+    default: tlt_encode
+  engine_filename: 
+    type: string
+    default: ND
+  cal_data_dir:
+    type: uri_folder
+  cal_data_filename:
+    type: string
+    default: ND
+  use_image_cal:
+    type: string
+    default: ND      
+  cal_image_dir:
+    type: uri_folder
+  cal_cache_filename:
+    type: string
+    default: ND
+  experiment_specs_dir:
+    type: uri_folder
+  experiment_specs_filename:
+    type: string
+    default: ND
+  data_type:
+    type: string
+    default: ND
+  strict_type_constraints:
+    type: string
+    default: ND
+  gen_ds_config:
+    type: string
+    default: ND
+  use_validation_set:
+    type: string
+    default: ND
+  batches:
+    type: string
+    default: ND
+  batch_size:
+    type: string
+    default: ND
+  max_batch_size:
+    type: string
+    default: ND
+  max_workspace_size:
+    type: string
+    default: ND
+  verbose:
+    type: string
+    default: ND  
+outputs:
+  exported_model_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./tao_detectnet_v2_export.sh ${{inputs.source_model_dir}} ${{inputs.source_subfolder}} ${{inputs.source_model_name}} ${{outputs.exported_model_dir}} ${{inputs.exported_subfolder}} ${{inputs.exported_model_name}} ${{inputs.key}} ${{inputs.engine_filename}} ${{inputs.cal_data_dir}} ${{inputs.cal_data_filename}} ${{inputs.use_image_cal}} ${{inputs.cal_image_dir}} ${{inputs.cal_cache_filename}} ${{inputs.experiment_specs_dir}} ${{inputs.experiment_specs_filename}} ${{inputs.data_type}} ${{inputs.strict_type_constraints}} ${{inputs.gen_ds_config}} ${{inputs.use_validation_set}} ${{inputs.batches}} ${{inputs.batch_size}} ${{inputs.max_batch_size}} ${{inputs.max_workspace_size}} ${{inputs.verbose}} 

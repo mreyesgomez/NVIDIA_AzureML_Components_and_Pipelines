@@ -1,0 +1,35 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: triton_create_model_repository
+display_name: triton_create_model_repository
+version: 1
+type: command
+inputs:
+  source_model_dir:
+    type: uri_folder
+  source_subfolder:
+    type: string
+    default: experiment_dir_retrain
+  source_model_name:
+    type: string
+    default: resnet18_detector_pruned
+  config_files_dir:
+    type: uri_folder
+  config_filename:
+    type: string
+    default: config.pbtxt
+  repository_model_name:
+    type: string
+    default: detectnet_tao
+  model_filename:
+    type: string
+    default: model.plan
+  new_config_filename:
+    type: string
+    default: config.pbtxt 
+outputs:
+  triton_model_repository_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./triton_create_model_repository.sh ${{inputs.source_model_dir}}/detectnet_v2/${{inputs.source_subfolder}}/${{inputs.source_model_name}} ${{inputs.config_files_dir}}/${{inputs.config_filename}} ${{outputs.triton_model_repository_dir}}/model_repository ${{inputs.repository_model_name}} ${{inputs.model_filename}} ${{inputs.new_config_filename}}

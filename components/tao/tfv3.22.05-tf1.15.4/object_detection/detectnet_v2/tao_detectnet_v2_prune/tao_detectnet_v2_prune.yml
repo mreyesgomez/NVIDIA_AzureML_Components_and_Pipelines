@@ -1,0 +1,49 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_detectnet_v2_prune
+display_name: tao_detectnet_v2_prune
+version: 1
+type: command
+inputs:
+  unpruned_model_dir:
+    type: uri_folder
+  unprunned_model_subfolder:
+    type: string
+    default: experiment_dir_unpruned
+  unprunned_model_name:
+    type: string
+    default: resnet18_detector
+  prunned_model_subfolder:
+    type: string
+    default: experiment_dir_pruned
+  prunned_model_name:
+    type: string
+    default: resnet18_nopool_bn_detectnet_v2_pruned 
+  key:
+    type: string
+    default: tlt_encode
+  equalization_criterion:
+    type: string
+    default: ND
+  pth:
+    type: string
+    default: ND
+  normalizer:
+    type: string
+    default: ND
+  excluded_layers:
+    type: string
+    default: ND
+  pruning_granularity:
+    type: string
+    default: ND
+  min_num_filters:
+    type: string
+    default: ND
+outputs:
+  pruned_model_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./tao_detectnet_v2_prune.sh ${{inputs.unpruned_model_dir}} ${{inputs.unprunned_model_subfolder}} ${{inputs.unprunned_model_name}} ${{inputs.prunned_model_subfolder}} ${{inputs.prunned_model_name}} ${{inputs.key}} ${{outputs.pruned_model_dir}} ${{inputs.equalization_criterion}} ${{inputs.pth}} ${{inputs.normalizer}} ${{inputs.excluded_layers}} ${{inputs.pruning_granularity}} ${{inputs.min_num_filters}}
+

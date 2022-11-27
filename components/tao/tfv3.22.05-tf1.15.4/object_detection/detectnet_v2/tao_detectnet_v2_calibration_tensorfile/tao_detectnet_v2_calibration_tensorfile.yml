@@ -1,0 +1,37 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_detectnet_v2_calibration_tensorfile
+display_name: tao_detectnet_v2_calibration_tensorfile
+version: 1
+type: command
+inputs:
+  data_dir:
+    type: uri_folder
+  base_model_dir:
+    type: uri_folder
+  tf_records_dir:
+    type: uri_folder
+  original_specs:
+    type: uri_folder
+  specs_file:
+    type: string
+    default: detectnet_v2_retrain_resnet18_kitti.txt
+  max_batches:
+    type: number
+    default: 10
+  use_validation_set:
+    type: string
+    default: ND  
+  output_subfolder:
+    type: string
+    default: experiment_dir_final
+  output_filename:
+    type: string
+    default: calibration.tensor 
+outputs:
+  output_dir:
+    type: uri_folder
+code: ./
+environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+command: >-
+  bash ./update_and_calibration_tensorfile.sh ${{inputs.original_specs}} ${{inputs.specs_file}} ${{inputs.data_dir}} ${{inputs.base_model_dir}} ${{inputs.tf_records_dir}} ${{inputs.output_subfolder}} ${{inputs.output_filename}} ${{outputs.output_dir}} ${{inputs.max_batches}} ${{inputs.use_validation_set}} 
+
