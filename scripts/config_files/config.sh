@@ -22,9 +22,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 subscription_id="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-subscription_id="ab221ca4-f098-422d-ab2f-5073b3851e68"
 resource_group="NVIDIA_COMPONENTS_AND_PIPELINES"
-workspace="NVIDIA_COMPONENTS_TEST2"
+workspace="NVIDIA_COMPONENTS_MAiN"
 vmsize="standard-nc6s-v3"
 nvidia_product="tao"
 container="tfv3.22.05-tf1.15.4"
