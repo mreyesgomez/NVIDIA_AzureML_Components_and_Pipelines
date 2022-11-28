@@ -23,7 +23,7 @@
 
 subscription_id="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 resource_group="NVIDIA_COMPONENTS_AND_PIPELINES"
-workspace="NVIDIA_COMPONENTS_MAiN"
+workspace="NVIDIA_COMPONENTS_MAIN"
 vmsize="standard-nc6s-v3"
 nvidia_product="tao"
 container="tfv3.22.05-tf1.15.4"
