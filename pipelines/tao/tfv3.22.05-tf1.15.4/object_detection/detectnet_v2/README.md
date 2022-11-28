@@ -8,6 +8,16 @@ Object detection is a popular computer vision technique that can detect one or m
 
 <img src="imgs/detectnetexample.png" width="900">
 
+Some of the major steps covered in the notebook are, but not limited to: 
+>	Setting the environment variables
+>	Downloading and converting the training data
+>	Downloading the model from the NGC catalog
+>	Training the model
+>	Pruning the model – this removes the unwanted layers, reducing the size of the model
+>	Retraining the pruned model to recover the lost accuracy
+>	Quantize Aware Training (QAT) that changes the precision of the model to INT8, reducing the size of the model, without sacrificing accuracy
+>	Exporting the model for inference 
+
 ## Model Indentification and Registering
 Pipelines contain end-to-end user cases that produce a model or a set of models as output, each pipeline has a folder deployment_scripts that has the scripts the user needs to run to deploy the model(s) into an AzureML Inference Endpoint
 
