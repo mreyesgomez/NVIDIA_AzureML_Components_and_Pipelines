@@ -181,7 +181,7 @@ A Pipeline Component is a multi-components Component that defines the user speci
 
 Pipeline components are specified by the following schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 
-As the AzureML Pipeline Component is in private preview, its usage requires setting the follwing environmental variable
+As the AzureML Pipeline Component is in private preview, its usage requires setting the following environmental variable
 
 <pre style="background-color:rgba(0, 0, 0, 0.0470588)"><font size="2">export AZURE_ML_CLI_PRIVATE_FEATURES_ENABLED=true
 </pre>
