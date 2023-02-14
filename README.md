@@ -107,11 +107,13 @@ And then navigating to the Environments tab
 ### AzureML Components
 [AzureML Components](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-create-component-pipeline-python) are functional pieces of code that are meant to be used repeatedly
 
+Regular command components are specified by the following schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+
 They are defined by a yml file
 
 <img src="imgs/TAO_Train_yml.png" width="1000">
 
-That specifies the name, number and nature of its inputs and output
+That specifies the name, number and nature of its inputs and outputs
 
 It also specifies the AzureML Environment to use
 
@@ -152,11 +154,15 @@ Before being able to submit an AzureML Job using a pipeline that uses the create
 
 ### AzureML Pipeline
 
-An [AzureML Pipeline](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-create-component-pipelines-cli) describes the interconections between multiple AzureML Components, a particular Run with specific inputs and outputs of a Component is called a Job, a Component could be call multiple times under different Job Names.
+An [AzureML Pipeline](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-create-component-pipelines-cli) describes the interconections between multiple AzureML Components, a particular Run with specific inputs and outputs of a Component is called a Job, a Component could be called multiple times under different Job Names.
 
 <img src="imgs/pipeline_yml.png" width="900">
 
-Notice that each job has an associated Compute Resource
+Notice that each component job has an associated Compute Resource, the pipeline inputs have to be defined. In particular uri_folder inputs need to refer to local folders from the machine where the pipeline job is submitted  
+
+The pipeline file defines the interactions between Components, specifying what Components outputs are feed to which Components inputs:
+
+<img src="imgs/outputpiping.png" width="530">
 
 The desired pipeline is submitted by using:
 
@@ -166,6 +172,25 @@ The desired pipeline is submitted by using:
 If the submission succeeds you should be able to see the job runing on the Azure Portal, it would be running under the desired Workspace
 
 <img src="imgs/pipeline_run.png" width="900">
+
+### AzureML Pipeline Component
+
+Pipeline yml files as they are can not be shared and run automatically by a given AzureML user as they contain information specific to the user, such as the local location of the uri_folders and the name of the Compute. However the information with respect to the interaction of inputs and outputs within Components is user independent and very useful to share. 
+
+A Pipeline Component is a multi-components Component that defines the user specific information, including the Compute name as variables to be passed during execution time, but that defines multiple Component Jobs and their input-output interactions just as a pipeline defintion yml file would do
+
+Pipeline components are specified by the following schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
+
+An example of the above Pipeline as a Pipeline component is the following:
+
+<img src="imgs/pipelineComponent.png" width="900">
+
+#### Submiting an AzureML Pipeline Component
+A pipeline yml file is still required, but its a much simpler file as it only defines the inputs and the final outputs of the workflow
+
+<img src="imgs/pipelinecomponentrun.png" width="900">
+
+If the user clicks on the folder icon the whole workflow appears just as in the previous submission
 
 ### AzureML Inference Endpoint
 

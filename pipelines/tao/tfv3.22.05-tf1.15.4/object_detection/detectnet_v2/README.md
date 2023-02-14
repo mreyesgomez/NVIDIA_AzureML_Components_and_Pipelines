@@ -8,6 +8,11 @@ Object detection is a popular computer vision technique that can detect one or m
 
 <img src="imgs/detectnetexample.png" width="900">
 
+The Pipeline yml executes the Pipeline Component: 
+
+<pre style="background-color:rgba(0, 0, 0, 0.0470588)"><font size="2">NVIDIA_AzureML_Components_and_Pipelines/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline
+</pre>
+
 Some of the major steps covered in the pipeline are, but not limited to: 
 
 * Setting the environment variables

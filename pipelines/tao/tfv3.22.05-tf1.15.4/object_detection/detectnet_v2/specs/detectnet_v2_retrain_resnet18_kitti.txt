@@ -201,7 +201,7 @@ cost_function_config {
 }
 training_config {
   batch_size_per_gpu: 4
-  num_epochs: 120
+  num_epochs: 12
   learning_rate {
     soft_start_annealing_schedule {
       min_learning_rate: 5e-06
