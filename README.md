@@ -194,6 +194,10 @@ An example of the above Pipeline as a Pipeline component is the following:
 #### Submiting an AzureML Pipeline Component
 A pipeline yml file is still required, but its a much simpler file as it only defines the inputs and the final outputs of the workflow
 
+<img src="imgs/pipelinecomponentpipeline.png" width="900">
+
+The pipeline run on the AzureML Studio would look like:
+
 <img src="imgs/pipelinecomponentrun.png" width="900">
 
 If the user clicks on the folder icon the whole workflow appears just as in the previous submission
