@@ -2,7 +2,7 @@ $schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
 type: pipeline
 experiment_name: NVIDIA_TAO_tfv3_22_05_tf1_15_4_DETECTNET_V2_pc
 settings:
-  default_compute: azureml:gpu-cluster-standard-nc6s-v3
+  default_compute: azureml:gpu-cluster
 inputs:
   num_gpus: 1
   key: 'tlt_encode'
@@ -12,7 +12,7 @@ inputs:
   config_files_dir: 
     type: uri_folder
     path: ./config_files/   
-  compute_train_node: gpu-cluster-standard-nc6s-v3
+  compute_train_node: gpu-cluster
 outputs: 
   triton_model_repository_dir:
     type: uri_folder
