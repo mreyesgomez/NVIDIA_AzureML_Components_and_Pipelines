@@ -1,7 +1,8 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: tao_detectnet_v2_inference
 display_name: tao_detectnet_v2_inference
-version: 1
+description: Wrapper for TAO command detectnet_v2 inference <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_inference/README.md>Reference file</a> 
+version: 2
 type: command
 inputs:
   data_dir:
@@ -11,6 +12,12 @@ inputs:
     default: /testing/image_2  
   model_dir:
     type: uri_folder
+  model_app_name: 
+      type: string
+      default: detectnet_v2
+  specfile_reference_model_dir:
+    type: string
+    default: /home/jupyter/detectnet_v2
   original_specs:
     type: uri_folder
   specs_file:
@@ -26,7 +33,16 @@ outputs:
   results_dir:
     type: uri_folder
 code: ./
-environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
 command: >-
-  bash ./update_and_inference.sh ${{inputs.original_specs}} ${{inputs.specs_file}} ${{inputs.data_dir}} ${{inputs.input_subfolder}} ${{inputs.model_dir}} ${{inputs.key}} ${{inputs.output_subfolder}} ${{outputs.results_dir}}
+  bash ./update_and_inference.sh 
+  ${{inputs.original_specs}} 
+  ${{inputs.specs_file}} 
+  ${{inputs.data_dir}} 
+  ${{inputs.input_subfolder}} 
+  ${{inputs.model_dir}}/${{inputs.model_app_name}}
+  ${{inputs.specfile_reference_model_dir}}
+  ${{inputs.key}} 
+  ${{inputs.output_subfolder}} 
+  ${{outputs.results_dir}}/${{inputs.model_app_name}}
 

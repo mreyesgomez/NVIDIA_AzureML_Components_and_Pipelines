@@ -1,7 +1,8 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: tao_detectnet_v2_dataset_convert
 display_name: tao_detectnet_v2_dataset_convert
-version: 1
+description: Wrapper for TAO command detectnet_v2 dataset_convert <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_dataset_convert/README.md>Reference file</a>
+version: 2
 type: command
 inputs:
   specs_dir:
@@ -14,6 +15,9 @@ inputs:
   output_filename:
     type: string
     default: kitti_trainval/kitti_trainval
+  specfile_reference_data_dir:
+    type: string
+    default: /home/jupyter/data 
   validation_fold:
     type: string
     default: ND
@@ -21,7 +25,14 @@ outputs:
   tf_records_dir:
     type: uri_folder
 code: ./
-environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
 command: >-
-  bash ./update_and_convert.sh ${{inputs.specs_dir}} ${{inputs.data_dir}} ${{inputs.dataset_export_spec}} ${{outputs.tf_records_dir}} ${{inputs.output_filename}} ${{inputs.validation_fold}} 
+  bash ./update_and_convert.sh 
+  ${{inputs.specs_dir}} 
+  ${{inputs.data_dir}} 
+  ${{inputs.dataset_export_spec}} 
+  ${{outputs.tf_records_dir}} 
+  ${{inputs.output_filename}} 
+  ${{inputs.specfile_reference_data_dir}} 
+  ${{inputs.validation_fold}} 
 

@@ -2,13 +2,13 @@ set -x
 
 # map the output data location to the directory name used by the script
 
-export UNPRUNED_MODEL_DIR=$1/detectnet_v2
+export UNPRUNED_MODEL_DIR=$1
 export UNPRUNNED_MODEL_SUBFOLDER=$2
 export UNPRUNNED_MODEL_NAME=$3
 export PRUNNED_MODEL_SUBFOLDER=$4
 export PRUNNED_MODEL_NAME=$5
 export KEY=$6
-export PRUNED_MODEL_DIR=$7/detectnet_v2
+export PRUNED_MODEL_DIR=$7
 export EQUALIZATION_CRITERION=${8}
 export PTH=${9}
 export NORMALIZER=${10}
@@ -17,7 +17,7 @@ export PRUNING_GRANULARITY=${12}
 export MIN_NUM_FILTERS=${13} 
 
 mkdir ${PRUNED_MODEL_DIR}
-mkdir ${PRUNED_MODEL_DIR}/experiment_dir_pruned
+mkdir ${PRUNED_MODEL_DIR}/${PRUNNED_MODEL_SUBFOLDER}
 
 ADDITIONAL_ARGS=""
 
@@ -52,9 +52,9 @@ then
 fi
 
 
-detectnet_v2 prune -m ${UNPRUNED_MODEL_DIR}/${UNPRUNNED_MODEL_SUBFOLDER}/weights/${UNPRUNNED_MODEL_NAME}.tlt -o ${PRUNED_MODEL_DIR}/${PRUNNED_MODEL_SUBFOLDER}/${PRUNNED_MODEL_NAME}.tlt $ADDITIONAL_ARGS -k $KEY
+detectnet_v2 prune -m ${UNPRUNED_MODEL_DIR}/${UNPRUNNED_MODEL_SUBFOLDER}/${UNPRUNNED_MODEL_NAME} -o ${PRUNED_MODEL_DIR}/${PRUNNED_MODEL_SUBFOLDER}/${PRUNNED_MODEL_NAME} $ADDITIONAL_ARGS -k $KEY
 
-ls -rlt ${PRUNED_MODEL_DIR}/experiment_dir_pruned/
+ls -rlt ${PRUNED_MODEL_DIR}/${PRUNNED_MODEL_SUBFOLDER}/
 
 
 

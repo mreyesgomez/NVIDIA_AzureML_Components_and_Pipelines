@@ -14,6 +14,8 @@ export GPU_INDEX=${9}
 
 ADDITIONAL_ARGS=""
 
+pip install h5py==2.10.0 
+
 if [[ "${FRAMEWORK}" != "ND" ]]
 then
     ADDITIONAL_ARGS="$ADDITIONAL_ARGS -f $FRAMEWORK"

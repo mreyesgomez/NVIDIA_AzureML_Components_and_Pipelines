@@ -1,9 +1,12 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: tao_detectnet_v2_export
 display_name: tao_detectnet_v2_export
-version: 1
+description: Wrapper for TAO command detectnet_v2 export <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_export/README.md>Reference file</a>
+version: 2
 type: command
 inputs:
+  model_app_name:
+    type: string
   source_model_dir:
     type: uri_folder
   source_subfolder:
@@ -73,6 +76,30 @@ outputs:
   exported_model_dir:
     type: uri_folder
 code: ./
-environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
 command: >-
-  bash ./tao_detectnet_v2_export.sh ${{inputs.source_model_dir}} ${{inputs.source_subfolder}} ${{inputs.source_model_name}} ${{outputs.exported_model_dir}} ${{inputs.exported_subfolder}} ${{inputs.exported_model_name}} ${{inputs.key}} ${{inputs.engine_filename}} ${{inputs.cal_data_dir}} ${{inputs.cal_data_filename}} ${{inputs.use_image_cal}} ${{inputs.cal_image_dir}} ${{inputs.cal_cache_filename}} ${{inputs.experiment_specs_dir}} ${{inputs.experiment_specs_filename}} ${{inputs.data_type}} ${{inputs.strict_type_constraints}} ${{inputs.gen_ds_config}} ${{inputs.use_validation_set}} ${{inputs.batches}} ${{inputs.batch_size}} ${{inputs.max_batch_size}} ${{inputs.max_workspace_size}} ${{inputs.verbose}} 
+  bash ./tao_detectnet_v2_export.sh 
+  ${{inputs.source_model_dir}}/${{inputs.model_app_name}}
+  ${{inputs.source_subfolder}} 
+  ${{inputs.source_model_name}} 
+  ${{outputs.exported_model_dir}}/${{inputs.model_app_name}}
+  ${{inputs.exported_subfolder}} 
+  ${{inputs.exported_model_name}} 
+  ${{inputs.key}} 
+  ${{inputs.engine_filename}} 
+  ${{inputs.cal_data_dir}}/${{inputs.model_app_name}}
+  ${{inputs.cal_data_filename}} 
+  ${{inputs.use_image_cal}} 
+  ${{inputs.cal_image_dir}} 
+  ${{inputs.cal_cache_filename}} 
+  ${{inputs.experiment_specs_dir}} 
+  ${{inputs.experiment_specs_filename}} 
+  ${{inputs.data_type}} 
+  ${{inputs.strict_type_constraints}} 
+  ${{inputs.gen_ds_config}} 
+  ${{inputs.use_validation_set}} 
+  ${{inputs.batches}} 
+  ${{inputs.batch_size}} 
+  ${{inputs.max_batch_size}} 
+  ${{inputs.max_workspace_size}} 
+  ${{inputs.verbose}} 

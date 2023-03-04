@@ -1,23 +1,27 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: tao_detectnet_v2_prune
 display_name: tao_detectnet_v2_prune
-version: 1
+description: Wrapper for TAO command detectnet_v2 prune <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_prune/README.md>Reference file</a>
+version: 2
 type: command
 inputs:
+  model_app_name:
+    type: string
+    default: detectnet_v2
   unpruned_model_dir:
     type: uri_folder
   unprunned_model_subfolder:
     type: string
-    default: experiment_dir_unpruned
+    default: experiment_dir_unpruned/weights
   unprunned_model_name:
     type: string
-    default: resnet18_detector
+    default: resnet18_detector.tlt
   prunned_model_subfolder:
     type: string
     default: experiment_dir_pruned
   prunned_model_name:
     type: string
-    default: resnet18_nopool_bn_detectnet_v2_pruned 
+    default: resnet18_nopool_bn_detectnet_v2_pruned.tlt
   key:
     type: string
     default: tlt_encode
@@ -43,7 +47,20 @@ outputs:
   pruned_model_dir:
     type: uri_folder
 code: ./
-environment: azureml:nvidia_tao_tfv3_22_05_tf1_15_4:1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
 command: >-
-  bash ./tao_detectnet_v2_prune.sh ${{inputs.unpruned_model_dir}} ${{inputs.unprunned_model_subfolder}} ${{inputs.unprunned_model_name}} ${{inputs.prunned_model_subfolder}} ${{inputs.prunned_model_name}} ${{inputs.key}} ${{outputs.pruned_model_dir}} ${{inputs.equalization_criterion}} ${{inputs.pth}} ${{inputs.normalizer}} ${{inputs.excluded_layers}} ${{inputs.pruning_granularity}} ${{inputs.min_num_filters}}
+  bash ./tao_detectnet_v2_prune.sh 
+  ${{inputs.unpruned_model_dir}}/${{inputs.model_app_name}}/
+  ${{inputs.unprunned_model_subfolder}}
+  ${{inputs.unprunned_model_name}} 
+  ${{inputs.prunned_model_subfolder}} 
+  ${{inputs.prunned_model_name}} 
+  ${{inputs.key}} 
+  ${{outputs.pruned_model_dir}}/${{inputs.model_app_name}}
+  ${{inputs.equalization_criterion}} 
+  ${{inputs.pth}} 
+  ${{inputs.normalizer}} 
+  ${{inputs.excluded_layers}} 
+  ${{inputs.pruning_granularity}} 
+  ${{inputs.min_num_filters}}
 

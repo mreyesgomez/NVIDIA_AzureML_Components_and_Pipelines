@@ -1,15 +1,15 @@
 set -x
 
 # map the output data location to the directory name used by the script
-export SOURCE_MODEL_DIR=$1/detectnet_v2
+export SOURCE_MODEL_DIR=$1
 export SOURCE_SUBFOLDER=$2
 export SOURCE_MODEL_NAME=$3
-export EXPORTED_MODEL_DIR=$4/detectnet_v2
+export EXPORTED_MODEL_DIR=$4
 export EXPORTED_SUBFOLDER=$5
 export EXPORTED_MODEL_NAME=$6
 export KEY=$7
 export ENGINE_FILENAME=$8
-export CAL_DATA_DIR=${9}/detectnet_v2
+export CAL_DATA_DIR=${9}
 export CAL_DATA_FILENAME=${10}
 export USE_IMAGE_CAL=${11}
 export CAL_IMAGE_DIR=${12}
@@ -101,6 +101,6 @@ then
     ADDITIONAL_ARGS="$ADDITIONAL_ARGS --verbose"
 fi
 
-detectnet_v2 export -m ${SOURCE_MODEL_DIR}/${SOURCE_SUBFOLDER}/weights/${SOURCE_MODEL_NAME}.tlt -o ${EXPORTED_MODEL_DIR}/${EXPORTED_SUBFOLDER}/${EXPORTED_MODEL_NAME}.etlt -k $KEY $ADDITIONAL_ARGS
+detectnet_v2 export -m ${SOURCE_MODEL_DIR}/${SOURCE_SUBFOLDER}/${SOURCE_MODEL_NAME} -o ${EXPORTED_MODEL_DIR}/${EXPORTED_SUBFOLDER}/${EXPORTED_MODEL_NAME} -k $KEY $ADDITIONAL_ARGS
 
 ls -lh ${EXPORTED_MODEL_DIR}/${EXPORTED_SUBFOLDER}

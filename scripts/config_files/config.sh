@@ -23,10 +23,14 @@
 
 subscription_id="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
 resource_group="NVIDIA_COMPONENTS_AND_PIPELINES"
-workspace="NVIDIA_COMPONENTS_MAIN"
+registry_name="MY_REGISTRY"
+#registry_name="NVIDIA-NGC-Test"
+workspace="NVIDIA_COMPONENTS_TEST"
 vmsize="standard-nc6s-v3"
 nvidia_product="tao"
 container="tfv3.22.05-tf1.15.4"
 compute_name="gpu-cluster-${vmsize}"
 product_subfolder="object_detection/detectnet_v2"
+#product_subfolder="object_detection/facenet"
 pipeline_path=pipelines/${nvidia_product}/${container}/${product_subfolder}
+num_epochs="4"

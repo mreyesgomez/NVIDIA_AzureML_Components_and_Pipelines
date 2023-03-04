@@ -2,26 +2,25 @@ set -x
 
 # map the output data location to the directory name used by the script
 
-export MODEL_TYPE=$1
-export ETLT_MODEL_DIR=$2/${MODEL_TYPE}
-export ETLT_MODEL_NAME=$3
-export ETLT_MODEL_SUBFOLDER=$4
-export TRT_MODEL_NAME=$5
-export TRT_MODEL_SUBFOLDER=$6
-export TRT_MODEL_DIR=$7/${MODEL_TYPE}
-export KEY=$8
-export INPUT_DIMENSIONS=$9
-export OUTPUT_NODES=${10}
-export CAL_CACHE_DIR=${11}/${MODEL_TYPE}
-export CAL_CACHE_FILENAME=${12}
-export CAL_BATCH_SIZE=${13}
-export MAX_BATCH_SIZE=${14}
-export ENGINE_DATATYPE=${15}
-export MAX_WORKSPACE_SIZE=${16}
-export INPUTS_DIMENSION_ORDERING=${17}
-export OPTIMIZATION_PROFILES=${18}
-export STRICT_TYPE_CONSTRAINTS=${19}
-export DLA_CORE_INDEX=${20}
+export ETLT_MODEL_DIR=$1
+export ETLT_MODEL_NAME=$2
+export ETLT_MODEL_SUBFOLDER=$3
+export TRT_MODEL_NAME=$4
+export TRT_MODEL_SUBFOLDER=$5
+export TRT_MODEL_DIR=$6
+export KEY=$7
+export INPUT_DIMENSIONS=$8
+export OUTPUT_NODES=${9}
+export CAL_CACHE_DIR=${10}
+export CAL_CACHE_FILENAME=${11}
+export CAL_BATCH_SIZE=${12}
+export MAX_BATCH_SIZE=${13}
+export ENGINE_DATATYPE=${14}
+export MAX_WORKSPACE_SIZE=${15}
+export INPUTS_DIMENSION_ORDERING=${16}
+export OPTIMIZATION_PROFILES=${17}
+export STRICT_TYPE_CONSTRAINTS=${18}
+export DLA_CORE_INDEX=${19}
 
 mkdir ${TRT_MODEL_DIR}
 mkdir -p ${TRT_MODEL_DIR}/${TRT_MODEL_SUBFOLDER}

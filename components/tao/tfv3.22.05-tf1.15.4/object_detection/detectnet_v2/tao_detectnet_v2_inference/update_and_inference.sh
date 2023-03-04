@@ -7,14 +7,17 @@ export SPECS_FILE=$2
 export DATA_DIR=$3/data
 export INPUT_SUBFOLDER=$4
 export MODEL_DIR=$5
-export KEY=$6
-export OUTPUT_SUBFOLDER=$7
-export RESULTS_DIR=$8/detectnet_v2
-export UPDATED_SPECs_DIR=$8/specs
+export SPECFILE_REFERENCE_MODEL_DIR=$6   
+export KEY=$7
+export OUTPUT_SUBFOLDER=$8
+export RESULTS_DIR=$9
+export UPDATED_SPECs_DIR=$9/specs
 
-mkdir $UPDATED_SPECs_DIR
 mkdir $RESULTS_DIR
+mkdir $RESULTS_DIR/$OUTPUT_SUBFOLDER
+mkdir $UPDATED_SPECs_DIR
 
-bash ./update_specs.sh ${ORIGINAL_SPECs_DIR} ${UPDATED_SPECs_DIR} ${SPECS_FILE} /home/jupyter/detectnet_v2:${MODEL_DIR}/detectnet_v2
+
+bash ./update_specs.sh ${ORIGINAL_SPECs_DIR} ${UPDATED_SPECs_DIR} ${SPECS_FILE} $SPECFILE_REFERENCE_MODEL_DIR:${MODEL_DIR}
 bash ./tao_detectnet_v2_inference.sh ${UPDATED_SPECs_DIR} ${SPECS_FILE} ${RESULTS_DIR} ${OUTPUT_SUBFOLDER} ${DATA_DIR} ${INPUT_SUBFOLDER} ${KEY}
 

@@ -1,0 +1,41 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: convert_multiple_streams_wider_to_kitti
+display_name: convert_multiple_streams_wider_to_kitti
+description: Auxiliary Component to convert data from the Wider format to the Kitti Format <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/convert_multiple_streams_wider_to_kitti/README.md>Reference file</a>
+version: 1
+type: command
+inputs:
+  source_data_dir:
+    type: uri_folder
+  image_subdirs:
+    type: string
+    default: WIDER_train/images,WIDER_val/images
+  label_files:
+    type: string
+    default: 'wider_face_split/wider_face_train_bbx_gt.txt,wider_face_split/wider_face_val_bbx_gt.txt'  
+  output_subdirs:
+    type: string
+    default: 'training,validation'
+  image_height:
+    type: number
+    default: 146
+  image_width:
+    type: number
+    default: 736
+outputs:
+  converted_data_dir:
+    type: uri_folder
+code: ./
+environment: azureml://registries/registry_name/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
+command: >-
+  bash ./convert_multiple_streams_wider_to_kitti.sh 
+  ${{inputs.source_data_dir}} 
+  ${{inputs.image_subdirs}} 
+  ${{inputs.label_files}} 
+  ${{inputs.output_subdirs}} 
+  ${{inputs.image_height}} 
+  ${{inputs.image_width}} 
+  ${{outputs.converted_data_dir}}
+
+
+

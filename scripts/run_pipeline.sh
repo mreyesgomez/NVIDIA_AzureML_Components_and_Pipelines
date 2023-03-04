@@ -7,7 +7,9 @@ export running_pipeline_file=pipelines/${nvidia_product}/${container}/${product_
 
 cp $pipeline_file $running_pipeline_file
 
-sed -i "s/gpu-cluster/${compute_name}/g" $running_pipeline_file
+sed -i "s/<gpu-cluster>/${compute_name}/g" $running_pipeline_file
+sed -i "s/<registry_name>/${registry_name}/g" $running_pipeline_file
+sed -i "s/<num_epochs>/${num_epochs}/g" $running_pipeline_file
 
 cat $running_pipeline_file
 
