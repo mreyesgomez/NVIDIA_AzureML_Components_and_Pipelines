@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: tao_detectnet_v2_evaluate
 display_name: tao_detectnet_v2_evaluate
-description: Wrapper for TAO command detectnet_v2 evaluate <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_evaluate/README.md>Reference file</a>
+description: Wrapper for TAO command detectnet_v2 evaluate, which is used to evaluate the performance of a model. It uses the same configuration specs as the TAO detectnet_v2 train command <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_evaluate/README.md>Reference file</a>
 version: 2
 type: command
 inputs:

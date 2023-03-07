@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: convert_multiple_streams_wider_to_kitti
 display_name: convert_multiple_streams_wider_to_kitti
-description: Auxiliary Component to convert data from the Wider format to the Kitti Format <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/convert_multiple_streams_wider_to_kitti/README.md>Reference file</a>
+description: Convert Multiple Streams Wider to Kitti; Format Conversion Auxiliary Component to convert data from the Wider format to the Kitti Format <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/convert_multiple_streams_wider_to_kitti/README.md>Reference file</a>
 version: 1
 type: command
 inputs:

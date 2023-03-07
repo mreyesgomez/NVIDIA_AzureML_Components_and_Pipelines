@@ -3,7 +3,7 @@ type: pipeline
 name: tao_facenet_pipeline
 version: 1
 display_name: pipeline component with TAO facenet workflow
-description: Pipeline component with TAO facenet workflow <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/facenet/tao_facenet_pipeline/README.md>Reference file</a>
+description: Face Detect AzureML Pipeline Component using TAO DetectNet_v2 Command Components. The FaceDetect model detects one or more faces in a given image or video. Some of the major steps covered in the pipeline are, but not limited to: Take a pretrained resnet18 model and train a ResNet-18 FaceNet model on the WIDERFACE dataset, Prune the trained FaceNet model, Retrain the pruned model to recover lost accuracy, Export the pruned model, Run Inference on the trained model <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/facenet/tao_facenet_pipeline/README.md>Reference file</a>
 inputs:
   num_epochs:
     type: integer
