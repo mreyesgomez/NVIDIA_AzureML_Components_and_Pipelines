@@ -1,6 +1,8 @@
 # NVIDIA_AzureML Components and Pipelines
 
-This repo contains material to produce AzureML Components and Pipelines based on NVIDIA products, along with the required AzureML Resources: Compute Clusters and Environments needed to run such Components and Pipelines.
+This repo contains the material to produce and publish the AzureML Environments, Command Components and Pipeline Components based on NVIDIA products contained in the multitenant AzureML Registry: https://ml.azure.com/registries/NVIDIA-NGC-Test.
+
+The user would be able to reproduce the content on the https://ml.azure.com/registries/NVIDIA-NGC-Test Registry and then submit pipeline job using that content or the user could submit a pipeline job using the already available content on the NVIDIA Registry
 
 The main folders in this repo are:
 
@@ -12,7 +14,7 @@ The main folders in this repo are:
 
 ## Components
 
-Contains the definitions to create AzureML Components wrapped around NVIDIA Products Commands (Functional pieces of code)
+Contains the definitions to create AzureML Components (Functional pieces of code) wrapped around NVIDIA Products Commands 
 
 They are divided by NVIDIA product, i.e.: Tao, Triton, Rapids. Since components are tied to AzureML Environments, for each product, components are then subdivided by the container they are associated with. AzureML Components associated with the same NVIDIA product command (functional piece of code) would use their versioning to map them to a particular AzureML Environment (NVIDIA product container). If a particular NVIDIA product further subdivides their commands into for instance user cases, such subdivision would be reflected on the subdirectory structure for such NVIDIA product.
 
@@ -45,8 +47,10 @@ The folder is subdivided by VM Size
 
 ## AzureML Resources
 
-### AzureML Workspace
-First the user needs to create an AzureML Workspace, if there is not one that is already set up
+### AzureML Registries
+[Registries in Azure Machine Learning](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/announcing-registries-in-azure-machine-learning-to/ba-p/3649242)  are organization wide repositories of machine learning assets such as models, environments, and components. Registries provide a central platform for cataloging and operationalizing machine learning models across various personas, teams and environments involved in the machine learning lifecycle. 
+
+If the user wants to recreate the AzureML Environments and Components in its own Registry then the user should first create its own Registry
 
 Go to the Azure Portal and on the search box type "Azure Machine Learning"
 
@@ -54,13 +58,15 @@ Go to the Azure Portal and on the search box type "Azure Machine Learning"
 
 Click into the Azure Machine Learning link
 
-Then create a new Workspace
+Then select the create a new registry option
 
 <img src="imgs/create.png" width="900">
 
 Fill the details
 
-<img src="imgs/details.png" width="900">
+<img src="imgs/details.png" width="700">
+
+Choose Rrgions
 
 Then click "Review and Create"
 
@@ -75,7 +81,7 @@ If you do not have it installed please run:
 
 To interact with the material, the user needs to provide its AzureML Information along with the NVIDIA Product to use, the container and the VM Size by filling the environmental variables at file: scripts/config_files/config.sh
 
-<img src="imgs/config_file.png" width="700">
+<img src="imgs/config_file.png" width="600">
 
 If a user wants to use a previously provisioned compute cluster, the user would need to change the "compute_name" variable to the one of the desired compute cluster
 
@@ -168,6 +174,8 @@ The desired pipeline is submitted by using:
 
 <pre style="background-color:rgba(0, 0, 0, 0.0470588)"><font size="2">bash scripts/run_pipeline.sh
 </pre>
+
+To control the number of epochs use for training the models, the user should use the num_epochs environmental variable in the config file: scripts/config_files/config.sh. For simple experementation the user should choose a value between 3-5. To produce a high performing model the value should be above 100
 
 If the submission succeeds you should be able to see the job runing on the Azure Portal, it would be running under the desired Workspace
 
