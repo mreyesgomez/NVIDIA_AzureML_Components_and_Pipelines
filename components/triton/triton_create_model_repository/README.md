@@ -37,6 +37,7 @@ The component has the following inputs and outputs:
 * outputs
     * triton_model_repository_dir:
 
+### Components Inputs and Outputs Mapping
 The mapping between the required information and the components inputs and outputs is the following:
 
 * model_source_path: ${source_model_dir}/$/{source_subfolder}/${source_subfolder}

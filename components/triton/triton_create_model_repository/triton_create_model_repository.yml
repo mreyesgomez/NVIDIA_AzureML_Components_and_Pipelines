@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: triton_create_model_repository
 display_name: triton_create_model_repository
-description: Triton Create Model Repository Component; This component creates a Model Repository format for the model to be deployed as an AzureML Triton Inference endpoint <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/components/triton/triton_create_model_repository//README.md>Reference file</a>
+description: Triton Create Model Repository Component; This component creates a Model Repository format for the model to be deployed as an AzureML Triton Inference endpoint <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/blob/main/components/triton/triton_create_model_repository/README.md>Reference file</a>
 version: 2
 type: command
 inputs:
@@ -33,7 +33,7 @@ outputs:
   triton_model_repository_dir:
     type: uri_folder
 code: ./
-environment: azureml://registries/registry_name/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
 command: >-
   bash ./triton_create_model_repository.sh 
   ${{inputs.source_model_dir}}/${{inputs.model_app_name}}/${{inputs.source_subfolder}}/${{inputs.source_model_name}} 

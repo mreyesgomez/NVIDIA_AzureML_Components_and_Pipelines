@@ -40,3 +40,45 @@ The following outlines the converter command:
 * <span style="color:red;font-weight:700;font-size:12px">-c:</span>  Path to calibration cache file, only used in INT8 mode. The default value is ./cal.bin.
 * <span style="color:red;font-weight:700;font-size:12px">-b:</span>  Batch size used during the export step for INT8 calibration cache generation. (default: 8).
 * <span style="color:red;font-weight:700;font-size:12px">-m:</span>  Maximum batch size for TensorRT engine.(default: 16). If meet with out-of-memory issue, decrease the batch size accordingly. This parameter is not required for .etlt models generated with dynamic shape. (This is only possible for new models introduced in TAO Toolkit 3.21.08.)
+
+### Component Inputs and Outputs
+* inputs:
+    * model_app_name
+    * etlt_model_dir
+    * etlt_model_name
+    * etlt_model_subfolder
+    * trt_model_name
+    * trt_model_subfolder
+    * key
+    * input_dimensions
+    * output_nodes
+    * cal_cache_dir
+    * cal_cache_filename
+    * cal_batch_size
+    * max_batch_size
+    * engine_datatype
+    * max_workspace_size
+    * input_dimension_ordering
+    * optimization_profiles
+    * strict_type_constraints
+    * dla_core_index
+* outputs:
+    * trt_model_dir
+
+### Components Inputs and Outputs Mapping to TAO Command Parameters
+* <span style="color:red;font-weight:700;font-size:12px">input_file:</span> ${etlt_model_dir}/${model_app_name}/${etlt_model_subfolder}/${etlt_model_name}
+* <span style="color:red;font-weight:700;font-size:12px">-k:</span> ${key}
+* <span style="color:red;font-weight:700;font-size:12px">-d:</span> ${input_dimensions}
+* <span style="color:red;font-weight:700;font-size:12px">-o:</span> ${output_nodes}
+* <span style="color:red;font-weight:700;font-size:12px">-e</span> ${trt_model_dir}/${model_app_name}/${trt_model_subfolder}/${trt_model_name} 
+* <span style="color:red;font-weight:700;font-size:12px">-t:</span> ${engine_datatype}
+* <span style="color:red;font-weight:700;font-size:12px">-w:</span> ${max_workspace_size}
+* <span style="color:red;font-weight:700;font-size:12px">-i:</span> ${input_dimension_ordering} 
+* <span style="color:red;font-weight:700;font-size:12px">-p:</span> ${optimization_profiles} 
+* <span style="color:red;font-weight:700;font-size:12px">-s:</span> ${strict_type_constraints} 
+* <span style="color:red;font-weight:700;font-size:12px">-u:</span> ${dla_core_index} 
+* <span style="color:red;font-weight:700;font-size:12px">-c:</span> ${cal_cache_dir}/${etlt_model_subfolder}/${cal_cache_filename}
+* <span style="color:red;font-weight:700;font-size:12px">-b:</span> ${cal_batch_size} 
+* <span style="color:red;font-weight:700;font-size:12px">-m:</span> ${max_batch_size} 
+
+

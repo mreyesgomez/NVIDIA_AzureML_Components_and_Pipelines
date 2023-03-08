@@ -121,3 +121,50 @@ The following are command line arguments of the <span style="color:red;font-weig
 * <span style="color:red;font-weight:700;font-size:12px">--engine_file</span>: The path to the serialized TensorRT engine file. Note that this file is hardware specific and cannot be generalized across GPUs. Use this argument to quickly test your model accuracy using TensorRT on the host. As the TensorRT engine file is hardware specific, you cannot use this engine file for deployment unless the deployment GPU is identical to the training GPU.
 
 * <span style="color:red;font-weight:700;font-size:12px">--force_ptq</span>: A Boolean flag to force post-training quantization on the exported .etlt model.
+
+### Components Inputs and Outputs
+* inputs
+    * model_app_name
+    * source_model_dir
+    * source_subfolder
+    * source_model_name
+    * exported_subfolder
+    * exported_model_name
+    * key
+    * engine_filename
+    * cal_data_dir
+    * cal_data_filename
+    * use_image_cal
+    * cal_image_dir
+    * cal_cache_filename
+    * experiment_specs_dir
+    * experiment_specs_filename
+    * data_type
+    * strict_type_constraints
+    * gen_ds_config
+    * use_validation_set
+    * batches
+    * batch_size
+    * max_batch_size
+    * max_workspace_size
+    * verbose
+* outputs:
+    * exported_model_dir
+
+### Components Inputs and Outputs Mapping to TAO Command Parameters
+* <span style="color:red;font-weight:700;font-size:12px">-m, --model</span>: ${source_model_dir}/${model_app_name}/${source_subfolder}/${source_model_name}
+* <span style="color:red;font-weight:700;font-size:12px">-k, --key</span>: ${key}
+* <span style="color:red;font-weight:700;font-size:12px">-e, --experiment_spec</span>: ${experiment_specs_dir}/${experiment_specs_filename}
+* <span style="color:red;font-weight:700;font-size:12px">-o, --output_file</span>: ${exported_model_dir}/${model_app_name}/${exported_subfolder}/${exported_model_name}
+* <span style="color:red;font-weight:700;font-size:12px">--data_type</span>: ${data_type}
+* <span style="color:red;font-weight:700;font-size:12px">-s, --strict_type_constraints</span>: ${strict_type_constraints}
+* <span style="color:red;font-weight:700;font-size:12px">--gen_ds_config</span>: ${gen_ds_config}
+* <span style="color:red;font-weight:700;font-size:12px">--cal_data_file</span>: ${cal_data_dir}/${model_app_name}/${cal_data_filename}
+* <span style="color:red;font-weight:700;font-size:12px">--cal_image_dir</span>: ${cal_image_dir} 
+* <span style="color:red;font-weight:700;font-size:12px">--cal_cache_file</span>: ${cal_cache_filename} 
+* <span style="color:red;font-weight:700;font-size:12px">--batches</span>: ${batches} 
+* <span style="color:red;font-weight:700;font-size:12px">--batch_size</span>: ${batch_size} 
+* <span style="color:red;font-weight:700;font-size:12px">--max_batch_size</span>: ${max_batch_size} 
+* <span style="color:red;font-weight:700;font-size:12px">--max_workspace_size</span>: ${max_workspace_size} 
+* <span style="color:red;font-weight:700;font-size:12px">--experiment_spec</span>: ${experiment_specs_dir}/${experiment_specs_filename} 
+* <span style="color:red;font-weight:700;font-size:12px">--engine_file</span>: ${engine_filename} 

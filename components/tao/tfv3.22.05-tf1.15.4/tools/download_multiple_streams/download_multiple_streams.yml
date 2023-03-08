@@ -18,7 +18,7 @@ outputs:
   data_dir:
     type: uri_folder
 code: ./
-environment: azureml://registries/registry_name/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
 command: >-
   bash ./download_multiple_streams.sh 
   ${{inputs.urls}} 

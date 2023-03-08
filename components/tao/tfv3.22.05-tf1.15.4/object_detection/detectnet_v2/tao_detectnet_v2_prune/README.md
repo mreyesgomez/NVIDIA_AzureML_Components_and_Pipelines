@@ -16,7 +16,7 @@ The <span style="color:red;font-weight:700;font-size:12px">prune</span> task inc
 </pre>
 
 ### Required Arguments
-* <span style="color:red;font-weight:700;font-size:12px">-pm, --pretrained_model:</span> The path to the pretrained model.
+* <span style="color:red;font-weight:700;font-size:12px">-m, --pretrained_model:</span> The path to the original model.
 * <span style="color:red;font-weight:700;font-size:12px">-o, --output_file:</span> The path to the output checkpoints.
 * <span style="color:red;font-weight:700;font-size:12px">-k, -–key:</span> The encryption key to decrypt the model. This argument is only required with a .tlt model file.
 
@@ -36,3 +36,33 @@ Here’s an example of using the <span style="color:red;font-weight:700;font-siz
                        -eq union
                        -pth 0.7 -k $KEY
 </pre>
+
+### Components Inputs and Outputs
+* inputs
+    * model_app_name
+    * unpruned_model_dir
+    * unprunned_model_subfolder
+    * unprunned_model_name
+    * prunned_model_subfolder
+    * prunned_model_name
+    * key
+    * equalization_criterion
+    * pth
+    * normalizer
+    * excluded_layers
+    * pruning_granularity
+    * min_num_filters
+* outputs:
+    * pruned_model_dir
+
+### Components Inputs and Outputs Mapping to TAO Command Parameters
+
+* <span style="color:red;font-weight:700;font-size:12px">-m, --pretrained_model:</span> ${unpruned_model_dir}/${model_app_name}/${unpruned_model_dir}/${unprunned_model_name}
+* <span style="color:red;font-weight:700;font-size:12px">-o, --output_file:</span> ${pruned_model_dir}/${model_app_name}/${pruned_model_dir}/${prunned_model_name}
+* <span style="color:red;font-weight:700;font-size:12px">-k, -–key:</span> ${key}
+* <span style="color:red;font-weight:700;font-size:12px">-n, –normalizer:</span> ${normalizer}
+* <span style="color:red;font-weight:700;font-size:12px">-eq, --equalization_criterion:</span> ${equalization_criterion}
+* <span style="color:red;font-weight:700;font-size:12px">-pg, -pruning_granularity:</span>${pruning_granularity}
+* <span style="color:red;font-weight:700;font-size:12px">-pth:</span> ${pth}
+* <span style="color:red;font-weight:700;font-size:12px">-nf, --min_num_filters:</span> ${min_num_filters}
+* <span style="color:red;font-weight:700;font-size:12px">-el, --excluded_layers:</span> ${excluded_layers}

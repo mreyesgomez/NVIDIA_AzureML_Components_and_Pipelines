@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
 name: tao_detectnet_v2_export
 display_name: tao_detectnet_v2_export
-description: Wrapper for TAO command detectnet_v2 export, that prepares a trained DetectNet_v2 model for Deploying to Triton</span> or DeepStream.  <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_export/README.md>Reference file</a>
+description: Wrapper for TAO command detectnet_v2 export, that prepares a trained DetectNet_v2 model for Deploying to Triton or DeepStream.  The TAO export Component optionally generates the calibration cache for TensorRT INT8 engine calibration. <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_export/README.md>Reference file</a>
 version: 2
 type: command
 inputs:
