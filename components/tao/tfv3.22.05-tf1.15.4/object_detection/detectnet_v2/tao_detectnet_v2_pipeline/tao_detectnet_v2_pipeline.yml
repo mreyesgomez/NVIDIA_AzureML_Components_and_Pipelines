@@ -1,11 +1,13 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: detectnet_v2_data_pipeline
-version: 2
+version: 3
 display_name: pipeline component with detectnet_v2 workflow
 description: Object Detection AzureML Pipeline Component using TAO DetectNet_v2 Command Components. It executes several actions such as dowmloading data and base model, model retraining, model prunning with retraining  and model quantization with retraining <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
   model_app_name:
+    type: string
+  class_list:
     type: string
   num_epochs:
     type: integer
@@ -61,7 +63,7 @@ outputs:
 jobs: 
   download_data:
     type: command
-    component: azureml://registries/<registry_name>/components/download_multiple_streams/versions/1
+    component: azureml://registries/<registry_name>/components/download_multiple_streams/versions/2
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       urls: "https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip,https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip"
@@ -71,7 +73,7 @@ jobs:
       data_dir: ${{parent.outputs.data_dir}}
   dataset_convert:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_dataset_convert/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_dataset_convert/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -83,7 +85,7 @@ jobs:
       tf_records_dir: ${{parent.outputs.tf_records_dir}}
   download_model:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_download_model/versions/2
+    component: azureml://registries/<registry_name>/components/tao_download_model/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -94,7 +96,7 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}  
   tao_train_base:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -107,6 +109,7 @@ jobs:
       validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
       validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
       model_app_name: ${{parent.inputs.model_app_name}}
+      class_list: ${{parent.inputs.class_list}}
       base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
       specfile_reference_model_dir: /home/jupyter/detectnet_v2
       original_specs: ${{parent.inputs.original_specs}}
@@ -115,11 +118,12 @@ jobs:
       name_string_for_the_model: 'resnet18_detector'
       model_subfolder: experiment_dir_unpruned
       specs_file: detectnet_v2_train_resnet18_kitti.txt
+      log_file: log_train_base.txt
     outputs:
       trained_model_dir: ${{parent.outputs.unpruned_model_dir}}
   tao_evaluate_trained_unpruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -141,7 +145,7 @@ jobs:
       specs_file: detectnet_v2_train_resnet18_kitti.txt
   tao_prune:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_prune/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_prune/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs: 
       unpruned_model_dir: ${{parent.jobs.tao_train_base.outputs.trained_model_dir}}
@@ -156,7 +160,7 @@ jobs:
       pruned_model_dir: ${{parent.outputs.pruned_model_dir}}
   tao_train_pruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -169,6 +173,7 @@ jobs:
       validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
       validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
       model_app_name: ${{parent.inputs.model_app_name}}
+      class_list: ${{parent.inputs.class_list}}
       base_model_dir: ${{parent.jobs.tao_prune.outputs.pruned_model_dir}}
       base_model_subdir: experiment_dir_pruned
       specfile_reference_model_dir: /home/jupyter/detectnet_v2/experiment_dir_pruned
@@ -178,11 +183,12 @@ jobs:
       name_string_for_the_model: resnet18_detector_pruned
       model_subfolder: experiment_dir_retrain
       specs_file: detectnet_v2_retrain_resnet18_kitti.txt
+      log_file: log_train_pruned.txt
     outputs:
       trained_model_dir: ${{parent.outputs.pruned_and_retrained_model_dir}}
   tao_evaluate_pruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -205,7 +211,7 @@ jobs:
       specs_file: detectnet_v2_retrain_resnet18_kitti.txt
   tao_inference_pruned_and_trained:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -221,7 +227,7 @@ jobs:
       results_dir: ${{parent.outputs.pruned_and_retrained_model_inference_dir}}
   tao_export_pruned_and_trained:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_export/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_export/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -238,7 +244,7 @@ jobs:
       exported_model_dir: ${{parent.outputs.pruned_and_retrained_exported_model_dir}}
   tao_calibration_tensorfile:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_calibration_tensorfile/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_calibration_tensorfile/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -262,7 +268,7 @@ jobs:
       output_dir: ${{parent.outputs.calibration_tensorfile_dir}}
   tao_export_to_int8:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_export/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_export/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -287,7 +293,7 @@ jobs:
       exported_model_dir: ${{parent.outputs.int8_model_dir}}
   tao_convert_int8:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_convert/versions/2
+    component: azureml://registries/<registry_name>/components/tao_convert/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -309,7 +315,7 @@ jobs:
       trt_model_dir: ${{parent.outputs.pruned_and_retrained_trt_model_dir}}
   tao_inference_int8:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -325,7 +331,7 @@ jobs:
       results_dir: ${{parent.outputs.int8_model_inference_dir}}
   tao_train_qat:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -338,6 +344,7 @@ jobs:
       validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
       validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
       model_app_name: ${{parent.inputs.model_app_name}}
+      class_list: ${{parent.inputs.class_list}}
       base_model_dir: ${{parent.jobs.tao_prune.outputs.pruned_model_dir}}
       base_model_subdir: experiment_dir_pruned
       specfile_reference_model_dir: /home/jupyter/detectnet_v2/experiment_dir_pruned
@@ -347,11 +354,12 @@ jobs:
       name_string_for_the_model: resnet18_detector_pruned_qat
       model_subfolder: experiment_dir_retrain_qat
       specs_file: detectnet_v2_retrain_resnet18_kitti_qat.txt
+      log_file: log_train_qat.txt
     outputs:
       trained_model_dir: ${{parent.outputs.qat_trained_model_dir}}
   tao_evaluate_qat:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -375,7 +383,7 @@ jobs:
       running_framework: tlt
   tao_export_to_qat:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_export/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_export/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -398,7 +406,7 @@ jobs:
       exported_model_dir: ${{parent.outputs.qat_trt_model_dir}}
   tao_evaluate_qat_int8:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -422,7 +430,7 @@ jobs:
       running_framework: tensorrt
   tao_inference_qat_int8:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -438,7 +446,7 @@ jobs:
       results_dir: ${{parent.outputs.qat_int8_model_inference_dir}}
   triton_create_model_repository:
     type: command
-    component: azureml://registries/<registry_name>/components/triton_create_model_repository/versions/2
+    component: azureml://registries/<registry_name>/components/triton_create_model_repository/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}

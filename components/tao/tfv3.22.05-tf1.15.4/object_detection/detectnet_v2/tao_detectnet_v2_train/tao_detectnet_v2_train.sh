@@ -17,7 +17,7 @@ export ADDITIONAL_ARGS=""
 
 if [[ "${GPU_INDEX}" != "ND" ]]
 then
-    ADDITIONAL_ARGS="$ADDITIONAL_ARGS --gpu_index ${GPU_INDEX}"
+    ADDITIONAL_ARGS="$ADDITIONAL_ARGS --gpu_index $GPU_INDEX"
 fi
 
 if [[ "${USE_AMP}" != "ND" ]]
@@ -27,7 +27,7 @@ fi
 
 if [[ "${LOG_FILE}" != "ND" ]]
 then
-    ADDITIONAL_ARGS="$ADDITIONAL_ARGS --log_file ${LOG_FILE}"
+    ADDITIONAL_ARGS="$ADDITIONAL_ARGS --log_file $TRAINED_MODEL_DIR/$LOG_FILE"
 fi
 
 detectnet_v2 train -e ${UPDATED_SPECs_DIR}/${SPECS_FILE} -r ${TRAINED_MODEL_DIR}/${MODEL_SUBFOLDER} -k $KEY -n ${NAME_STRING_FOR_THE_MODEL} --gpus ${NUM_GPUS} ${ADDITIONAL_ARGS}

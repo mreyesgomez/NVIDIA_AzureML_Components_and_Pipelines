@@ -21,11 +21,11 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-subscription_id="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+subscription_id="ab221ca4-f098-422d-ab2f-5073b3851e68"
 resource_group="NVIDIA_COMPONENTS_AND_PIPELINES"
-registry_name="MY_REGISTRY"
+registry_name="Registry_Test3"
 #registry_name="NVIDIA-NGC-Test"
-workspace="NVIDIA_COMPONENTS_TEST"
+workspace="NVIDIA_COMPONENTS_TEST7"
 vmsize="standard-nc6s-v3"
 nvidia_product="tao"
 container="tfv3.22.05-tf1.15.4"

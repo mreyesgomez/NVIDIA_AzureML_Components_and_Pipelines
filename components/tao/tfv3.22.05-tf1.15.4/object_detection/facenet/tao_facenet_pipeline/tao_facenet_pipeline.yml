@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_facenet_pipeline
-version: 1
+version: 2
 display_name: pipeline component with TAO facenet workflow
 description: Face Detect AzureML Pipeline Component using TAO DetectNet_v2 Command Components. The FaceDetect model detects one or more faces in a given image or video. Some of the major steps covered in the pipeline are, but not limited to Take a pretrained resnet18 model and train a ResNet-18 FaceNet model on the WIDERFACE dataset, Prune the trained FaceNet model, Retrain the pruned model to recover lost accuracy, Export the pruned model, Run Inference on the trained model <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/facenet/tao_facenet_pipeline/README.md>Reference file</a>
 inputs:
@@ -39,7 +39,7 @@ outputs:
 jobs: 
   download_data:
     type: command
-    component: azureml://registries/<registry_name>/components/download_multiple_streams/versions/1
+    component: azureml://registries/<registry_name>/components/download_multiple_streams/versions/2
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       urls: "https://huggingface.co/datasets/wider_face/resolve/main/data/WIDER_train.zip,https://huggingface.co/datasets/wider_face/resolve/main/data/WIDER_val.zip,https://huggingface.co/datasets/wider_face/resolve/main/data/WIDER_test.zip,http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/support/bbx_annotation/wider_face_split.zip"
@@ -49,7 +49,7 @@ jobs:
       data_dir: ${{parent.outputs.data_dir}}
   convert_data:
     type: command
-    component: azureml://registries/<registry_name>/components/convert_multiple_streams_wider_to_kitti/versions/1
+    component: azureml://registries/<registry_name>/components/convert_multiple_streams_wider_to_kitti/versions/2
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       source_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
@@ -62,7 +62,7 @@ jobs:
       converted_data_dir: ${{parent.outputs.converted_data_dir}}
   dataset_convert_train:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_dataset_convert/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_dataset_convert/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -74,7 +74,7 @@ jobs:
       tf_records_dir: ${{parent.outputs.tf_records_dir_train}}
   dataset_convert_val:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_dataset_convert/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_dataset_convert/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -86,7 +86,7 @@ jobs:
       tf_records_dir: ${{parent.outputs.tf_records_dir_val}}
   download_model:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_download_model/versions/2
+    component: azureml://registries/<registry_name>/components/tao_download_model/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -97,7 +97,7 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}
   tao_evaluate_pretrained:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       training_data_dir: ${{parent.jobs.convert_data.outputs.converted_data_dir}}
@@ -124,7 +124,7 @@ jobs:
       specs_file: facenet_train_resnet18_kitti.txt
   tao_train_base:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -154,7 +154,7 @@ jobs:
       trained_model_dir: ${{parent.outputs.unpruned_model_dir}}
   tao_evaluate_trained_unpruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       training_data_dir: ${{parent.jobs.convert_data.outputs.converted_data_dir}}
@@ -181,7 +181,7 @@ jobs:
       specs_file: facenet_train_resnet18_kitti.txt
   tao_prune:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_prune/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_prune/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -197,7 +197,7 @@ jobs:
       pruned_model_dir: ${{parent.outputs.pruned_model_dir}}
   tao_train_pruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_train/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -227,7 +227,7 @@ jobs:
       trained_model_dir: ${{parent.outputs.pruned_and_retrained_model_dir}}
   tao_evaluate_trained_pruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_evaluate/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       training_data_dir: ${{parent.jobs.convert_data.outputs.converted_data_dir}}
@@ -254,10 +254,10 @@ jobs:
       specs_file: facenet_retrain_resnet18_kitti.txt
   tao_inference_trained_pruned:
     type: command
-    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/2
+    component: azureml://registries/<registry_name>/components/tao_detectnet_v2_inference/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
-      data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      data_dir: ${{parent.jobs.convert_data.outputs.converted_data_dir}}
       input_subfolder: validation/images
       model_app_name: ${{parent.inputs.model_app_name}}
       model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}

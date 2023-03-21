@@ -2,7 +2,7 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.jso
 name: tao_convert
 display_name: tao_convert
 description: This component is a wrapper for the TAO converter command. Which is a binary to decrypt a .etlt from TAO Toolkit and generate a TensorRT engine for deployment <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/tao_convert/README.md>Reference</a>
-version: 2
+version: 3
 type: command
 inputs:
   model_app_name:
@@ -64,7 +64,7 @@ outputs:
   trt_model_dir:
     type: uri_folder
 code: ./
-environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/2
 command: >-
   bash ./tao_convert.sh 
   ${{inputs.etlt_model_dir}}/${{inputs.model_app_name}}

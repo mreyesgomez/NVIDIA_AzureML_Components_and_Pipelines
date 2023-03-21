@@ -2,7 +2,7 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.jso
 name: download_multiple_streams
 display_name: download_multiple_streams
 description: Auxiliary Component to download data streams from multiple source urls into the same output folder. It requires also information on the expected files types and an optional checksum value to verify the data was downloaded as expected <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/download_multiple_streams/README.md>Reference file</a>
-version: 1
+version: 2
 type: command
 inputs:
   urls:
@@ -18,7 +18,7 @@ outputs:
   data_dir:
     type: uri_folder
 code: ./
-environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
+environment: azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/2
 command: >-
   bash ./download_multiple_streams.sh 
   ${{inputs.urls}} 

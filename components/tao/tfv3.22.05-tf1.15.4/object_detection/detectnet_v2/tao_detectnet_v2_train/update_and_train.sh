@@ -3,26 +3,27 @@ set -x
 # map the output data location to the directory name used by the script
 export ORIGINAL_SPECs_DIR=$1
 export SPEC_FILE=$2
-export NUM_EPOCHS=$3
-export TRAINING_DATA_DIR=$4
-export SPECFILE_REFERENCE_TRAINING_DATA_DIR=$5
-export VALIDATION_DATA_DIR=$6
-export SPECFILE_REFERENCE_VALIDATION_DATA_DIR=$7
-export TRAINING_TF_RECORDS_DIR=$8
-export SPECFILE_REFERENCE_TRAINING_TF_RECORDS_DIR=$9
-export VALIDATION_TF_RECORDS_DIR=${10}
-export SPECFILE_REFERENCE_VALIDATION_TF_RECORDS_DIR=${11}
-export KEY=${12}
-export BASE_MODEL_DIR=${13}
-export SPECFILE_REFERENCE_MODEL_DIR=${14}
-export NUM_GPUS=${15}
-export NAME_STRING_FOR_THE_MODEL=${16}
-export MODEL_SUBFOLDER=${17}
-export TRAINED_MODEL_DIR=${18}
-export UPDATED_SPECs_DIR=${18}/specs
-export GPU_INDEX=${19}
-export USE_AMP=${20}
-export LOG_FILE=${21}
+export CLASS_LIST=$3
+export NUM_EPOCHS=$4
+export TRAINING_DATA_DIR=$5
+export SPECFILE_REFERENCE_TRAINING_DATA_DIR=$6
+export VALIDATION_DATA_DIR=$7
+export SPECFILE_REFERENCE_VALIDATION_DATA_DIR=$8
+export TRAINING_TF_RECORDS_DIR=$9
+export SPECFILE_REFERENCE_TRAINING_TF_RECORDS_DIR=${10}
+export VALIDATION_TF_RECORDS_DIR=${11}
+export SPECFILE_REFERENCE_VALIDATION_TF_RECORDS_DIR=${12}
+export KEY=${13}
+export BASE_MODEL_DIR=${14}
+export SPECFILE_REFERENCE_MODEL_DIR=${15}
+export NUM_GPUS=${16}
+export NAME_STRING_FOR_THE_MODEL=${17}
+export MODEL_SUBFOLDER=${18}
+export TRAINED_MODEL_DIR=${19}
+export UPDATED_SPECs_DIR=${19}/specs
+export GPU_INDEX=${20}
+export USE_AMP=${21}
+export LOG_FILE=${22}
 
 #base_model_subdir migth be not defined so /ND pattern needs to be removed
 BASE_MODEL_DIR=`echo ${BASE_MODEL_DIR} | sed -e 's%/ND%%g'`
@@ -44,3 +45,10 @@ else
 fi
 
 bash ./tao_detectnet_v2_train.sh ${UPDATED_SPECs_DIR} ${SPEC_FILE} ${TRAINED_MODEL_DIR} ${MODEL_SUBFOLDER} ${NUM_GPUS} ${KEY} ${NAME_STRING_FOR_THE_MODEL} ${GPU_INDEX} ${USE_AMP} ${LOG_FILE}
+
+
+if [[ "${LOG_FILE}" != "ND" ]]
+then 
+    LOG_FILE=$TRAINED_MODEL_DIR/$LOG_FILE
+    python3 ./parse_info.py --logfile=$LOG_FILE --class_list=$CLASS_LIST --num_epochs=$NUM_EPOCHS
+fi

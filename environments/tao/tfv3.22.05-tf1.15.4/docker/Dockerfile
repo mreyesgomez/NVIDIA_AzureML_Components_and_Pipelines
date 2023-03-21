@@ -16,5 +16,7 @@ RUN pip install 'matplotlib>=3.3,<3.4' \
                 'unzip' \
                 'ipykernel' \
                 'ipython' \
+                'mlflow' \ 
+                'pillow' \
                 'jupyterlab'
 

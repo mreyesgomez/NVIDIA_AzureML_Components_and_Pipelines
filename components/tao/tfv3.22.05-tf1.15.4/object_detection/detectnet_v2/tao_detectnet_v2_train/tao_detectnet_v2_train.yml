@@ -2,10 +2,12 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.jso
 name: tao_detectnet_v2_train
 display_name: tao_detectnet_v2_train
 description: Wrapper for TAO command detectnet_v2 train. After creating TFRecords ingestible by the TAO training and setting up a spec file, one is now ready to start training an object detection network using this component. It allows the specification of the number of epochs to be used <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_train/README.md>Reference file</a> 
-version: 2
+version: 3
 type: command
 inputs:
   model_app_name:
+    type: string
+  class_list:
     type: string
   num_epochs:
     type: number
@@ -75,11 +77,12 @@ outputs:
   trained_model_dir:
     type: uri_folder
 code: ./
-environment:  azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/1
+environment:  azureml://registries/<registry_name>/environments/nvidia_tao_tfv3_22_05_tf1_15_4/versions/2
 command: >-
   bash ./update_and_train.sh 
   ${{inputs.original_specs}} 
   ${{inputs.specs_file}}
+  ${{inputs.class_list}}
   ${{inputs.num_epochs}}
   ${{inputs.training_data_dir}}/${{inputs.training_data_subdir}}
   ${{inputs.specfile_reference_training_data_dir}} 

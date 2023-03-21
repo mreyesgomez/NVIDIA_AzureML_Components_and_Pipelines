@@ -5,6 +5,7 @@ settings:
   default_compute: azureml:<gpu-cluster>
 inputs:
   model_app_name: detectnet_v2
+  class_list: car,cyclist,pedestrian
   num_epochs: <num_epochs>
   num_gpus: 1
   key: 'tlt_encode'
@@ -27,8 +28,9 @@ outputs:
 jobs:
   detect_net_workflow:
     type: pipeline
-    component: azureml://registries/<registry_name>/components/detectnet_v2_data_pipeline/versions/2
+    component: azureml://registries/<registry_name>/components/detectnet_v2_data_pipeline/versions/3
     inputs:
+      class_list: ${{parent.inputs.class_list}}
       num_epochs: ${{parent.inputs.num_epochs}}
       num_gpus: ${{parent.inputs.num_gpus}}
       key: ${{parent.inputs.key}}
