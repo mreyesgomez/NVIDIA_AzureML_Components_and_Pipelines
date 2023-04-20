@@ -1,0 +1,28 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: download_multiple_streams
+display_name: download_multiple_streams
+description: Auxiliary Component to download data streams from multiple source urls into the same output folder. It requires also information on the expected files types and an optional checksum value to verify the data was downloaded as expected <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/download_multiple_streams/README.md>Reference file</a>
+version: 2
+type: command
+inputs:
+  urls:
+    type: string
+    default: http://images.cocodataset.org/zips/train2017.zip,http://images.cocodataset.org/zips/val2017.zip,http://images.cocodataset.org/annotations/annotations_trainval2017.zip
+  file_types:
+    type: string
+    default: 'training_images,validations_images,annotations'  
+  checksums:
+    type: string
+    default: 'NA'
+outputs:
+  data_dir:
+    type: uri_folder
+code: ./
+environment: azureml://registries/<registry_name>/environments/tao-toolkit-4.0.0-tf1.15.5/versions/2
+command: >-
+  bash ./download_multiple_streams.sh 
+  ${{inputs.urls}} 
+  ${{inputs.file_types}} 
+  ${{inputs.checksums}} 
+  ${{outputs.data_dir}}
+
