@@ -22,7 +22,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 subscription_id="c81d69b0-e717-4018-99c9-7d71389d2355"
-resource_group="nv-tme-rg-test"
+resource_group="nv-tme-rg-test2"
 registry_name="hwolff-registry"
 #registry_name="NVIDIA-NGC-Test"
 workspace="tme-demo-ml"
