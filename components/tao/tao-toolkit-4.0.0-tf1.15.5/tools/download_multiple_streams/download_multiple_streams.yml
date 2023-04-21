@@ -2,15 +2,15 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.jso
 name: download_multiple_streams
 display_name: download_multiple_streams
 description: Auxiliary Component to download data streams from multiple source urls into the same output folder. It requires also information on the expected files types and an optional checksum value to verify the data was downloaded as expected <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/tools/download_multiple_streams/README.md>Reference file</a>
-version: 2
+version: 3
 type: command
 inputs:
   urls:
     type: string
-    default: http://images.cocodataset.org/zips/train2017.zip,http://images.cocodataset.org/zips/val2017.zip,http://images.cocodataset.org/annotations/annotations_trainval2017.zip
+    default: https://huggingface.co/datasets/wider_face/resolve/main/data/WIDER_train.zip,https://huggingface.co/datasets/wider_face/resolve/main/data/WIDER_val.zip,https://huggingface.co/datasets/wider_face/resolve/main/data/WIDER_test.zip,http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/support/bbx_annotation/wider_face_split.zip
   file_types:
     type: string
-    default: 'training_images,validations_images,annotations'  
+    default: 'training_images,validations_images,testing_images,annotations' 
   checksums:
     type: string
     default: 'NA'

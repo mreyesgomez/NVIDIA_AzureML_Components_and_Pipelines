@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 1
+version: 2
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
@@ -63,12 +63,11 @@ outputs:
 jobs: 
   download_data:
     type: command
-    component: azureml://registries/hwolff-registry/components/download_multiple_streams/versions/2
+    component: azureml://registries/hwolff-registry/components/download_multiple_streams/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       urls: "http://images.cocodataset.org/zips/train2017.zip,http://images.cocodataset.org/zips/val2017.zip,http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
-      file_types: "IMAGES,LABELS"
-      checksums: '^351c5a2aa0cd9238b50174a3a62b846bc5855da256b82a196431d60ff8d43617$,^4efc76220d867e1c31bb980bbf8cbc02599f02a9cb4350effa98dbb04aaed880$'
+      file_types: "TRAINING_IMAGES,VALIDATION_IMAGES,LABELS"
     outputs:
       data_dir: ${{parent.outputs.data_dir}}
   # dataset_convert:
