@@ -9,9 +9,9 @@ inputs:
   # num_epochs: <num_epochs>
   # num_gpus: 1
   # key: 'tlt_encode'
-  # original_specs:
-  #   type: uri_folder
-  #   path: ./specs/
+  original_specs:
+    type: uri_folder
+    path: ./specs/
   # config_files_dir: 
   #   type: uri_folder
   #   path: ./config_files/   
@@ -28,14 +28,14 @@ inputs:
 jobs:
   body_pose_workflow:
     type: pipeline
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_pipeline/versions/2
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_pipeline/versions/8
     inputs:
       # class_list: ${{parent.inputs.class_list}}
       # num_epochs: ${{parent.inputs.num_epochs}}
       # num_gpus: ${{parent.inputs.num_gpus}}
       # key: ${{parent.inputs.key}}
       compute_train_node: ${{parent.inputs.compute_train_node}}
-    #   original_specs: ${{parent.inputs.original_specs}}
+      original_specs: ${{parent.inputs.original_specs}}
     #   config_files_dir: ${{parent.inputs.config_files_dir}}
     #   model_app_name: ${{parent.inputs.model_app_name}}
     #   dummy_validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
