@@ -28,7 +28,7 @@ inputs:
 jobs:
   body_pose_workflow:
     type: pipeline
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_pipeline/versions/16
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_pipeline/versions/19
     inputs:
       # class_list: ${{parent.inputs.class_list}}
       # num_epochs: ${{parent.inputs.num_epochs}}
