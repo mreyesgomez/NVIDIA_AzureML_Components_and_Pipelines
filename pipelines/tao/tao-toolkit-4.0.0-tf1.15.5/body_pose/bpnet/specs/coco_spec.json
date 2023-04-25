@@ -3,12 +3,12 @@
     "root_directory_path": "/workspace/notebooks/tao_launcher_starter_kit/bpnet/data",
     "train_data": {
         "images_root_dir_path": "train2017",
-        "mask_root_dir_path": "/output/train_mask2017",
+        "mask_root_dir_path": "train_mask2017",
         "annotation_root_dir_path": "annotations/person_keypoints_train2017.json"
     },
     "test_data": {
         "images_root_dir_path": "val2017",
-        "mask_root_dir_path": "/output/val_mask2017",
+        "mask_root_dir_path": "val_mask2017",
         "annotation_root_dir_path": "annotations/person_keypoints_val2017.json"
     },
     "duplicate_data_with_each_person_as_center": true,

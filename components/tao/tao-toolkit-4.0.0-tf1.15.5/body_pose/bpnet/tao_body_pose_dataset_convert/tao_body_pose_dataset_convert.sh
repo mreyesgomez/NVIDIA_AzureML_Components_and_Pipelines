@@ -21,3 +21,4 @@ ls $TF_RECORDS_DIR
 #detectnet_v2 dataset_convert -d $SPECS_DIR/$DATASET_EXPORT_SPEC -o $TF_RECORDS_DIR/$DATA_FILENAME $ADDITIONAL_ARGS
 echo dataset_convert -m $MODE -o $TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC
 bpnet dataset_convert -m $MODE -o $TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC
+# sleep infinity
