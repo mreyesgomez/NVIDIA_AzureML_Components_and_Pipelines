@@ -4,7 +4,7 @@ experiment_name: NVIDIA_TAO_BPNET_JOB #TODO check name is appropriate NVIDIA_TAO
 settings:
   default_compute: azureml:<gpu-cluster>
 inputs:
-  # model_app_name: detectnet_v2
+  model_app_name: bpnet
   # class_list: car,cyclist,pedestrian
   # num_epochs: <num_epochs>
   # num_gpus: 1
@@ -28,7 +28,7 @@ inputs:
 jobs:
   body_pose_workflow:
     type: pipeline
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_pipeline/versions/8
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_pipeline/versions/11
     inputs:
       # class_list: ${{parent.inputs.class_list}}
       # num_epochs: ${{parent.inputs.num_epochs}}
@@ -37,7 +37,7 @@ jobs:
       compute_train_node: ${{parent.inputs.compute_train_node}}
       original_specs: ${{parent.inputs.original_specs}}
     #   config_files_dir: ${{parent.inputs.config_files_dir}}
-    #   model_app_name: ${{parent.inputs.model_app_name}}
+      model_app_name: ${{parent.inputs.model_app_name}}
     #   dummy_validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
     #   dummy_validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
     # outputs:

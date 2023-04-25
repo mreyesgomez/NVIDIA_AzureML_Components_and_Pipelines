@@ -1,12 +1,12 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 8
+version: 11
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
-#   model_app_name:
-#     type: string
+  model_app_name:
+    type: string
 #   class_list:
 #     type: string
 #   num_epochs:
@@ -30,8 +30,8 @@ outputs:
     type: uri_folder
   tf_records_dir_train:
     type: uri_folder
-  # base_model_dir:
-  #   type: uri_folder
+  base_model_dir:
+    type: uri_folder
   # unpruned_model_dir:
   #   type: uri_folder
   # pruned_model_dir:
@@ -72,7 +72,7 @@ jobs:
       data_dir: ${{parent.outputs.data_dir}}
   dataset_convert_train:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/5
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/7
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -82,17 +82,17 @@ jobs:
       specfile_reference_data_dir: /workspace/notebooks/tao_launcher_starter_kit/bpnet/data
     outputs:
       tf_records_dir: ${{parent.outputs.tf_records_dir_train}}
-  # download_model:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_download_model/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     model_type: pretrained_detectnet_v2
-  #     model_name: resnet18
-  #     model_subdir: pretrained_resnet18
-  #   outputs:
-  #     base_model_dir: ${{parent.outputs.base_model_dir}}  
+  download_model:
+    type: command
+    component: azureml://registries/hwolff-registry/components/tao_download_model/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      model_app_name: ${{parent.inputs.model_app_name}}
+      model_type: bodyposenet
+      model_name: trainable_v1.0
+      model_subdir: pretrained_model
+    outputs:
+      base_model_dir: ${{parent.outputs.base_model_dir}}  
   # tao_train_base:
   #   type: command
   #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_train/versions/3
