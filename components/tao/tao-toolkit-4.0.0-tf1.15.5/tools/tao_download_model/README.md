@@ -18,6 +18,3 @@ After downloading the tool the Component executes:
 
 ngc registry model download-version nvidia/tao/${model_type}:${model_name} \
     --dest ${base_model_dir}/${model_app_name}/${model_subdir}
-
-
- 

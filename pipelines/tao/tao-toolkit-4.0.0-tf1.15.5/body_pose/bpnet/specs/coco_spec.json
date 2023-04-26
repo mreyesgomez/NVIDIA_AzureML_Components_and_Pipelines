@@ -1,6 +1,6 @@
 {
     "dataset": "coco",
-    "root_directory_path": "/workspace/notebooks/tao_launcher_starter_kit/bpnet/data",
+    "root_directory_path": "/workspace/tao-experiments/bpnet/data",
     "train_data": {
         "images_root_dir_path": "train2017",
         "mask_root_dir_path": "train_mask2017",
