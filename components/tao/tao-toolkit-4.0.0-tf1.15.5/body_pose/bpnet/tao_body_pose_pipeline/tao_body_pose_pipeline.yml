@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 32
+version: 49
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
@@ -74,7 +74,7 @@ jobs:
       data_dir: ${{parent.outputs.data_dir}}
   dataset_convert_train:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/13
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/23
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -88,7 +88,7 @@ jobs:
       tf_records_dir: ${{parent.outputs.tf_records_dir_train}}
   dataset_convert_val:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/12
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/23
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -113,16 +113,16 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}  
   tao_train_base:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_bpnet_train/versions/12
+    component: azureml://registries/hwolff-registry/components/tao_bpnet_train/versions/16
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
       training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
       training_data_subdir: data/train2017
-      specfile_reference_training_data_dir: /home/jupyter/data/training
+      specfile_reference_training_data_dir: /workspace/tao-experiments/bpnet/data/
       training_tf_records_dir: ${{parent.jobs.dataset_convert_train.outputs.tf_records_dir}}
-      training_tf_records_subdir: data/tfrecords
-      specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
+      # training_tf_records_subdir: ""
+      specfile_reference_training_tf_records_dir: /workspace/tao-experiments/bpnet/data
       validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
       validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
       model_app_name: ${{parent.inputs.model_app_name}}
