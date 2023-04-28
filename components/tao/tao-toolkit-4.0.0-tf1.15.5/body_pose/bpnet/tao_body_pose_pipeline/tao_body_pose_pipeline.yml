@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 50
+version: 54
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
@@ -113,7 +113,7 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}  
   tao_train_base:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_bpnet_train/versions/16
+    component: azureml://registries/hwolff-registry/components/tao_bpnet_train/versions/20
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -127,11 +127,11 @@ jobs:
       validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
       model_app_name: ${{parent.inputs.model_app_name}}
       base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
-      specfile_reference_model_dir: /home/jupyter/bpnet
+      specfile_reference_model_dir: /workspace/tao-experiments/bpnet/pretrained_model/bodyposenet_vtrainable_v1.0/model.tlt
       original_specs: ${{parent.inputs.original_specs}}
       num_gpus: ${{parent.inputs.num_gpus}}
       key: ${{parent.inputs.key}}
-      name_string_for_the_model: 'bpnet'
+      model_name: 'model.tlt'
       model_subfolder: exp_m1_unpruned
       specs_file: bpnet_train_m1_coco.yaml
       specfile_model_pose_dir: /workspace/examples/bpnet/model_pose_config
