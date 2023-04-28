@@ -1,7 +1,7 @@
 #!/bin/bash  
 export SPECS_DIR=$1
 export DATASET_EXPORT_SPEC=$2
-export TF_RECORDS_DIR=$3/tfrecords
+export TF_RECORDS_DIR=$3/$5 # ends in either train or val -- this determines the name of the file like train-fold-000-of-001
 export DATA_FILENAME=$4
 export MODE=$5
 
