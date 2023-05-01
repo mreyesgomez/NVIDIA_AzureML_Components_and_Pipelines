@@ -2,7 +2,7 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.jso
 name: tao_bpnet_train
 display_name: tao_bpnet_train
 description: Wrapper for TAO command bpnet train. After creating TFRecords ingestible by the TAO training and setting up a spec file, one is now ready to start training an object detection network using this component. It allows the specification of the number of epochs to be used <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_train/README.md>Reference file</a> 
-version: 20
+version: 22
 type: command
 inputs:
   model_app_name:
@@ -76,10 +76,10 @@ inputs:
     default: ND
   specfile_model_pose_dir:
     type: string
-    default: /workspace/examples/bpnet/model_pose_config
+    default:  /workspace/examples/bpnet/model_pose_config/bpnet_18joints.json
   specfile_data_pose_dir:
     type: string
-    default: /workspace/examples/bpnet/data_pose_config
+    default: /workspace/examples/bpnet/data_pose_config/coco_spec.json
 outputs:
   trained_model_dir:
     type: uri_folder
