@@ -25,5 +25,5 @@ The following diagram provides a high-level view of the DeepStream component for
 ## DeepStream components for Azure ML
 
 * [Bodypose 2D](./6.2-triton/podyppse_2d/README.md)
-* Detectnet v2
+* [Detection, tracking, classification](./6.2-triton/detection_tracking_classifiction/README.md)
 * Facenet
