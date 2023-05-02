@@ -1,0 +1,52 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_bpnet_inference
+display_name: tao_bpnet_inference
+description: Wrapper for TAO command bpnet inference, The inference command for bpnet may be used to visualize the pose predictions. Since BodyPoseNet is a fully convolutional neural net, the model can be inferred at a different inference resolution than the resolution at which it was trained. The input dims of the network will be overridden to run inference at this resolution if they are different from the training resolution. There may be some regression in accuracy when running inference at a resolution very different from the training. <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_inference/README.md>Reference file</a> 
+version: 1
+type: command
+inputs:
+  data_dir:
+    type: uri_folder
+  input_subfolder:
+    type: string
+    default: /data
+  model_dir:
+    type: uri_folder
+  model_app_name: 
+      type: string
+      default: bpnet
+  specfile_reference_model_dir:
+    type: string
+    default: /workspace/tao-experiments/bpnet/models/exp1/model.step-1.tlt
+  original_specs:
+    type: uri_folder
+  specs_file:
+    type: string
+    default: infer_spec_retrained.yaml
+  key:
+    type: string
+    default: tlt_encode 
+  output_subfolder:
+    type: string
+    default: infer_default
+  number_of_images:
+    type: integer
+    default: 10
+outputs:
+  results_dir:
+    type: uri_folder
+code: ./
+environment: azureml://registries/tme-bodypose-demo/environments/tao-toolkit-4.0.0-tf1.15.5/versions/2
+command: >-
+  bash ./update_and_inference.sh 
+  ${{inputs.original_specs}} 
+  ${{inputs.specs_file}} 
+  ${{inputs.data_dir}} 
+  ${{inputs.input_subfolder}} 
+  ${{inputs.model_dir}}/${{inputs.model_app_name}}
+  ${{inputs.specfile_reference_model_dir}}
+  ${{inputs.key}} 
+  ${{inputs.output_subfolder}}
+  ${{inputs.number_of_images}}
+  ${{outputs.results_dir}}/${{inputs.model_app_name}}
+

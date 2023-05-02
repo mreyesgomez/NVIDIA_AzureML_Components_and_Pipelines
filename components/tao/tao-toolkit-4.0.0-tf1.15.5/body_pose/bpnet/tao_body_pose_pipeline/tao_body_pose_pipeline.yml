@@ -1,14 +1,14 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 56
+version: 1
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
   model_app_name:
     type: string
-#   class_list:
-#     type: string
+  # class_list:
+  #   type: string
   num_epochs:
     type: integer
   num_gpus:
@@ -36,16 +36,16 @@ outputs:
     type: uri_folder
   unpruned_model_dir:
     type: uri_folder
-  # pruned_model_dir:
-  #   type: uri_folder
-  # pruned_and_retrained_model_dir:
-  #   type: uri_folder
-  # trained_model_dir:
-  #   type: uri_folder
-  # pruned_and_retrained_model_inference_dir:
-  #   type: uri_folder
-  # pruned_and_retrained_exported_model_dir:
-  #   type: uri_folder
+  pruned_model_dir:
+    type: uri_folder
+  pruned_and_retrained_model_dir:
+    type: uri_folder
+  trained_model_dir:
+    type: uri_folder
+  pruned_and_retrained_model_inference_dir:
+    type: uri_folder
+  pruned_and_retrained_exported_model_dir:
+    type: uri_folder
   # calibration_tensorfile_dir:
   #   type: uri_folder
   # int8_model_dir:
@@ -65,7 +65,7 @@ outputs:
 jobs: 
   download_data:
     type: command
-    component: azureml://registries/hwolff-registry/components/download_multiple_streams/versions/3
+    component: azureml://registries/tme-bodypose-demo/components/download_multiple_streams/versions/3
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       urls: "http://images.cocodataset.org/zips/train2017.zip,http://images.cocodataset.org/zips/val2017.zip,http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
@@ -74,7 +74,7 @@ jobs:
       data_dir: ${{parent.outputs.data_dir}}
   dataset_convert_train:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/24
+    component: azureml://registries/tme-bodypose-demo/components/tao_body_pose_dataset_convert/versions/1
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -88,7 +88,7 @@ jobs:
       tf_records_dir: ${{parent.outputs.tf_records_dir_train}}
   dataset_convert_val:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/24
+    component: azureml://registries/tme-bodypose-demo/components/tao_body_pose_dataset_convert/versions/1
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -102,7 +102,7 @@ jobs:
       tf_records_dir: ${{parent.outputs.tf_records_dir_val}}
   download_model:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_download_model/versions/1
+    component: azureml://registries/tme-bodypose-demo/components/tao_download_model/versions/1
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       model_app_name: ${{parent.inputs.model_app_name}}
@@ -113,7 +113,7 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}  
   tao_train_base:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_bpnet_train/versions/22
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_train/versions/1
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       num_epochs: ${{parent.inputs.num_epochs}}
@@ -138,127 +138,127 @@ jobs:
       # log_file: log_train_base.txt
     outputs:
       trained_model_dir: ${{parent.outputs.unpruned_model_dir}}
-  # tao_evaluate_trained_unpruned:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_evaluate/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     training_data_subdir: data/training
-  #     specfile_reference_training_data_dir: /home/jupyter/data/training
-  #     training_tf_records_dir: ${{parent.jobs.dataset_convert.outputs.tf_records_dir}}
-  #     training_tf_records_subdir: data/tfrecords
-  #     specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
-  #     validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
-  #     validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
-  #     specfile_reference_model_dir: /home/jupyter/detectnet_v2
-  #     original_specs: ${{parent.inputs.original_specs}}
-  #     key: ${{parent.inputs.key}}
-  #     model_name: resnet18_detector.tlt
-  #     model_subfolder: experiment_dir_unpruned/weights
-  #     target_model_dir: ${{parent.jobs.tao_train_base.outputs.trained_model_dir}}
-  #     specs_file: detectnet_v2_train_resnet18_kitti.txt
-  # tao_prune:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_prune/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs: 
-  #     unpruned_model_dir: ${{parent.jobs.tao_train_base.outputs.trained_model_dir}}
-  #     unprunned_model_subfolder: experiment_dir_unpruned/weights
-  #     unprunned_model_name: resnet18_detector.tlt
-  #     prunned_model_subfolder: experiment_dir_pruned
-  #     prunned_model_name: resnet18_nopool_bn_detectnet_v2_pruned.tlt
-  #     equalization_criterion: union
-  #     pth: "0.0000052"
-  #     key: ${{parent.inputs.key}}
-  #   outputs:
-  #     pruned_model_dir: ${{parent.outputs.pruned_model_dir}}
-  # tao_train_pruned:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_train/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     num_epochs: ${{parent.inputs.num_epochs}}
-  #     training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     training_data_subdir: data/training
-  #     specfile_reference_training_data_dir: /home/jupyter/data/training
-  #     training_tf_records_dir: ${{parent.jobs.dataset_convert.outputs.tf_records_dir}}
-  #     training_tf_records_subdir: data/tfrecords
-  #     specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
-  #     validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
-  #     validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     class_list: ${{parent.inputs.class_list}}
-  #     base_model_dir: ${{parent.jobs.tao_prune.outputs.pruned_model_dir}}
-  #     base_model_subdir: experiment_dir_pruned
-  #     specfile_reference_model_dir: /home/jupyter/detectnet_v2/experiment_dir_pruned
-  #     original_specs: ${{parent.inputs.original_specs}}
-  #     num_gpus: ${{parent.inputs.num_gpus}}
-  #     key: ${{parent.inputs.key}}
-  #     name_string_for_the_model: resnet18_detector_pruned
-  #     model_subfolder: experiment_dir_retrain
-  #     specs_file: detectnet_v2_retrain_resnet18_kitti.txt
-  #     log_file: log_train_pruned.txt
-  #   outputs:
-  #     trained_model_dir: ${{parent.outputs.pruned_and_retrained_model_dir}}
-  # tao_evaluate_pruned:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_evaluate/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     training_data_subdir: data/training
-  #     specfile_reference_training_data_dir: /home/jupyter/data/training
-  #     training_tf_records_dir: ${{parent.jobs.dataset_convert.outputs.tf_records_dir}}
-  #     training_tf_records_subdir: data/tfrecords
-  #     specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
-  #     validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
-  #     validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
-  #     base_model_dir: ${{parent.jobs.tao_prune.outputs.pruned_model_dir}}
-  #     base_model_subdir: experiment_dir_pruned
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     specfile_reference_model_dir: /home/jupyter/detectnet_v2/experiment_dir_pruned
-  #     original_specs: ${{parent.inputs.original_specs}}
-  #     key: ${{parent.inputs.key}}
-  #     model_name: resnet18_detector_pruned.tlt
-  #     model_subfolder: experiment_dir_retrain/weights
-  #     target_model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}
-  #     specs_file: detectnet_v2_retrain_resnet18_kitti.txt
-  # tao_inference_pruned_and_trained:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_inference/versions/4
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     input_subfolder: /testing/image_2
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}
-  #     specfile_reference_model_dir: /home/jupyter/detectnet_v2
-  #     original_specs: ${{parent.inputs.original_specs}}
-  #     specs_file: detectnet_v2_inference_kitti_tlt.txt 
-  #     key: ${{parent.inputs.key}}
-  #     output_subfolder: tlt_infer_testing
-  #   outputs:
-  #     results_dir: ${{parent.outputs.pruned_and_retrained_model_inference_dir}}
-  # tao_export_pruned_and_trained:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_export/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     source_model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}
-  #     source_subfolder: experiment_dir_retrain/weights
-  #     source_model_name: resnet18_detector_pruned.tlt
-  #     exported_subfolder: experiment_dir_final
-  #     exported_model_name: resnet18_detector.etlt
-  #     cal_image_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     cal_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     experiment_specs_dir: ${{parent.inputs.original_specs}}
-  #     key: ${{parent.inputs.key}}
-  #   outputs:
-  #     exported_model_dir: ${{parent.outputs.pruned_and_retrained_exported_model_dir}}
+  tao_evaluate_trained_unpruned:
+    type: command
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_evaluate/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      training_data_subdir: data/training
+      specfile_reference_training_data_dir: /home/jupyter/data/training
+      training_tf_records_dir: ${{parent.jobs.dataset_convert_val.outputs.tf_records_dir}}
+      training_tf_records_subdir: data/tfrecords
+      specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
+      validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
+      validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
+      model_app_name: ${{parent.inputs.model_app_name}}
+      base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
+      specfile_reference_model_dir: /workspace/tao-experiments/bpnet/pretrained_model/bodyposenet_vtrainable_v1.0/model.tlt
+      original_specs: ${{parent.inputs.original_specs}}
+      key: ${{parent.inputs.key}}
+      model_name: 'model.tlt'
+      model_subfolder: experiment_dir_unpruned/weights
+      target_model_dir: ${{parent.jobs.tao_train_base.outputs.trained_model_dir}}
+      specs_file: bpnet_train_m1_coco.yaml
+  tao_prune:
+    type: command
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_prune/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs: 
+      unpruned_model_dir: ${{parent.jobs.tao_train_base.outputs.trained_model_dir}}
+      unpruned_model_subfolder: experiment_dir_unpruned/weights
+      unpruned_model_name: resnet18_detector.tlt
+      pruned_model_subfolder: experiment_dir_pruned
+      pruned_model_name: resnet18_nopool_bn_detectnet_v2_pruned.tlt
+      equalization_criterion: union
+      pth: "0.0000052"
+      key: ${{parent.inputs.key}}
+    outputs:
+      pruned_model_dir: ${{parent.outputs.pruned_model_dir}}
+  tao_train_pruned:
+    type: command
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_train/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      num_epochs: ${{parent.inputs.num_epochs}}
+      training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      training_data_subdir: data/training
+      specfile_reference_training_data_dir: /home/jupyter/data/training
+      training_tf_records_dir: ${{parent.jobs.dataset_convert_train.outputs.tf_records_dir}}
+      training_tf_records_subdir: data/tfrecords
+      specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
+      validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
+      validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
+      model_app_name: ${{parent.inputs.model_app_name}}
+      # class_list: ${{parent.inputs.class_list}}
+      base_model_dir: ${{parent.jobs.tao_prune.outputs.pruned_model_dir}}
+      base_model_subdir: experiment_dir_pruned
+      specfile_reference_model_dir: /home/jupyter/detectnet_v2/experiment_dir_pruned
+      original_specs: ${{parent.inputs.original_specs}}
+      num_gpus: ${{parent.inputs.num_gpus}}
+      key: ${{parent.inputs.key}}
+      model_name: resnet18_detector_pruned
+      model_subfolder: experiment_dir_retrain
+      specs_file: detectnet_v2_retrain_resnet18_kitti.txt
+      log_file: log_train_pruned.txt
+    outputs:
+      trained_model_dir: ${{parent.outputs.pruned_and_retrained_model_dir}}
+  tao_evaluate_pruned:
+    type: command
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_evaluate/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      training_data_subdir: data/training
+      specfile_reference_training_data_dir: /home/jupyter/data/training
+      training_tf_records_dir: ${{parent.jobs.dataset_convert_val.outputs.tf_records_dir}}
+      training_tf_records_subdir: data/tfrecords
+      specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
+      validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
+      validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
+      base_model_dir: ${{parent.jobs.tao_prune.outputs.pruned_model_dir}}
+      base_model_subdir: experiment_dir_pruned
+      model_app_name: ${{parent.inputs.model_app_name}}
+      specfile_reference_model_dir: /home/jupyter/detectnet_v2/experiment_dir_pruned
+      original_specs: ${{parent.inputs.original_specs}}
+      key: ${{parent.inputs.key}}
+      model_name: resnet18_detector_pruned.tlt
+      model_subfolder: experiment_dir_retrain/weights
+      target_model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}
+      specs_file: detectnet_v2_retrain_resnet18_kitti.txt
+  tao_inference_pruned_and_trained:
+    type: command
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_inference/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      input_subfolder: /testing/image_2
+      model_app_name: ${{parent.inputs.model_app_name}}
+      model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}
+      specfile_reference_model_dir: /home/jupyter/detectnet_v2
+      original_specs: ${{parent.inputs.original_specs}}
+      specs_file: detectnet_v2_inference_kitti_tlt.txt 
+      key: ${{parent.inputs.key}}
+      output_subfolder: tlt_infer_testing
+    outputs:
+      results_dir: ${{parent.outputs.pruned_and_retrained_model_inference_dir}}
+  tao_export_pruned_and_trained:
+    type: command
+    component: azureml://registries/tme-bodypose-demo/components/tao_bpnet_export/versions/1
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      model_app_name: ${{parent.inputs.model_app_name}}
+      source_model_dir: ${{parent.jobs.tao_train_pruned.outputs.trained_model_dir}}
+      source_subfolder: experiment_dir_retrain/weights
+      source_model_name: resnet18_detector_pruned.tlt
+      exported_subfolder: experiment_dir_final
+      exported_model_name: resnet18_detector.etlt
+      cal_image_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      cal_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
+      experiment_specs_dir: ${{parent.inputs.original_specs}}
+      key: ${{parent.inputs.key}}
+    outputs:
+      exported_model_dir: ${{parent.outputs.pruned_and_retrained_exported_model_dir}}
   # tao_calibration_tensorfile:
   #   type: command
   #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_calibration_tensorfile/versions/4

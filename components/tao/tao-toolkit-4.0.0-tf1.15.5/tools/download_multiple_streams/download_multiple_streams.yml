@@ -18,7 +18,7 @@ outputs:
   data_dir:
     type: uri_folder
 code: ./
-environment: azureml://registries/<registry_name>/environments/tao-toolkit-4.0.0-tf1.15.5/versions/2
+environment: azureml://registries/tme-bodypose-demo/environments/tao-toolkit-4.0.0-tf1.15.5/versions/2
 command: >-
   bash ./download_multiple_streams.sh 
   ${{inputs.urls}} 
