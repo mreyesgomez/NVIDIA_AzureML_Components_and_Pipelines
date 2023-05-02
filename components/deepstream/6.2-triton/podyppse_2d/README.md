@@ -1,1 +1,1 @@
-# DeepStream Bodu Pose component for Azure ML
+# DeepStream Body Pose component for Azure ML
