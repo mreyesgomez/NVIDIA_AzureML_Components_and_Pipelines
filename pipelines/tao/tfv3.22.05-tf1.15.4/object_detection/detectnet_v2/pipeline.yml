@@ -28,7 +28,7 @@ outputs:
 jobs:
   detect_net_workflow:
     type: pipeline
-    component: azureml://registries/<registry_name>/components/detectnet_v2_data_pipeline/versions/3
+    component: azureml://registries/<registry_name>/components/detectnet_v2_data_pipeline/versions/5
     inputs:
       class_list: ${{parent.inputs.class_list}}
       num_epochs: ${{parent.inputs.num_epochs}}
