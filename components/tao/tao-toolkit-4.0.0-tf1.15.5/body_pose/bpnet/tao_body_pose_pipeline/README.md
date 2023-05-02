@@ -1,24 +1,15 @@
-# Object Detection AzureML Pipeline Component using TAO DetectNet_v2 Command Components
+# Body Pose Estimation AzureML Pipeline Component using TAO Bpnet Command Components
 
-This pipeline component implements this [NGC Notebook](https://catalog.ngc.nvidia.com/orgs/nvidia/resources/tao_detectnet) 
+This pipeline component implements this [NGC Notebook](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/tao/resources/tao-getting-started/version/4.0.2/files/notebooks/tao_launcher_starter_kit/bpnet/bpnet.ipynb) 
 
-## <span style="color:green;font-weight:700;font-size:24px">Object Detection Pipeline</span> 
+## <span style="color:green;font-weight:700;font-size:24px">Body Pose Estimation Pipeline</span> 
 
-Object detection is a popular computer vision technique that can detect one or multiple objects in a frame and place bounding boxes around them. This sample pipeline provided here, contains a ResNet18 model that you can retrain on an AzureML Compute Cluster, to identify a new set of objects: Car,Cyclist and Pedestrian, simply by running this pipeline.
-
-<img src="imgs/detectnetexample.png" width="900">
-
+BodyPoseNet is an NVIDIA-developed multi-person body pose estimation network included in the TAO Toolkit. It aims to predict the skeleton for every person in a given input image, which consists of keypoints and the connections between them. BodyPoseNet follows a single-shot, bottom-up methodology, so there is no need for a person detector. The pose/skeleton output is commonly used as input for applications like activity/gesture recognition, fall detection, and posture analysis, among others.
 
 Some of the major steps covered in the pipeline are, but not limited to: 
-
-* Setting the environment variables
 * Downloading and converting the training data
 * Downloading the model from the NGC catalog
 * Training the model
 * Pruning the model – this removes the unwanted layers, reducing the size of the model
 * Retraining the pruned model to recover the lost accuracy
-* Quantize Aware Training (QAT) that changes the precision of the model to INT8, reducing the size of the model, without sacrificing accuracy
 * Exporting the model for inference
-
-
- 

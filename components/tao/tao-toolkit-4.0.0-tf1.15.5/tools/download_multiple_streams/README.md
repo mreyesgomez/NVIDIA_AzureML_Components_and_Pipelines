@@ -3,7 +3,6 @@
 Auxiliary Component to download data streams from multiple source urls into the same output folder.
 
 ### Component Inputs and Outputs
-
 * inputs:
     * urls:
     * file_types
