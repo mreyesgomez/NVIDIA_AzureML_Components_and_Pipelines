@@ -1,0 +1,41 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+description: deepstream-bodypose component
+
+name: deepstream_bodypose_2d
+display_name: deepstream_bodypose_2d
+
+version: 1
+
+inputs:
+  configs:
+    type: uri_folder
+  conn_str:
+    type: string
+  container_name:
+    type: string
+  model:
+    type: uri_folder
+outputs:
+  sample_output_data:
+    type: uri_folder
+
+code: ./src
+
+environment: azureml://registries/<registry_name>/environments/nvidia_deepstream_6_2_triton/versions/1
+
+command: >-
+  python main.py  
+  --input_data ${{inputs.configs}}
+  --conn_str '${{inputs.conn_str}}'
+  --container_name ${{inputs.container_name}}
+  --model ${{inputs.model}}
+  --output_data ${{outputs.sample_output_data}}
+
+resources:
+  instance_count: 1
+
+distribution:
+  type: mpi
+  process_count_per_instance: 1

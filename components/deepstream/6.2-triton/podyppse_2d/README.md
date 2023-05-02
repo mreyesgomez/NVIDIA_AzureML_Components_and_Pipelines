@@ -1,0 +1,1 @@
+# DeepStream Bodu Pose component for Azure ML
