@@ -1,36 +1,33 @@
 ## Pre-processing the Dataset
-#### This component is a wrapper for the TAO DetectNet_v2 dataset_convert command
-#### Excerpt from the [DetectNet_v2 Documentation](https://docs.nvidia.com/tao/tao-toolkit/text/object_detection/detectnet_v2.html)
-The DetectNet_v2 app requires the raw input data to be converted to TFRecords for optimized iteration across the data batches. This can be done using the <span style="color:red;font-weight:700;font-size:12px"> dataset_convert </span> subtask under DetectNet_v2. Currently, the KITTI and COCO formats are supported.
+#### This component is a wrapper for the TAO bpnet dataset_convert command
+#### Excerpt from the [BodyPoseNet Documentation](https://docs.nvidia.com/tao/tao-toolkit/text/bodypose_estimation/bodyposenet.html)
+The BodyPoseNet app requires the raw input data to be converted to TFRecords for optimized iteration across the data batches. This can be done using the <span style="color:red;font-weight:700;font-size:12px"> dataset_convert </span> subtask under bpnet. Currently, the COCO format is supported.
 
-The dataset_convert tool requires a configuration file as input. Details of the configuration file and examples are included in the [DetectNet_v2 Documentation](https://docs.nvidia.com/tao/tao-toolkit/text/object_detection/detectnet_v2.html).
+The following outlines the bpnet dataset conversion command:
 
-### Sample Usage of the Dataset Converter Tool
-While KITTI is the accepted dataset format for object detection, the DetectNet_v2 trainer requires this data to be converted to TFRecord files for ingestion. The <span style="color:red;font-weight:700;font-size:12px"> dataset_convert </span> tool is described below:
-
-<pre style="background-color:rgba(0, 0, 0, 0.0470588)"><font size="2">tao detectnet_v2 dataset-convert -d DATASET_EXPORT_SPEC -o OUTPUT_FILENAME
-                 [-f VALIDATION_FOLD]
+<pre style="background-color:rgba(0, 0, 0, 0.0470588)"><font size="2">tao bpnet dataset_convert
+                            -d <path/to/dataset_spec>
+                            -o <path_to_output_tfrecords>
+                            -m <'train'/'test'>
 </pre>
 
-You can use the following arguments:
+### Required Arguments
+* <span style="color:red;font-weight:700;font-size:12px">-d, --dataset_spec </span>: The path to the JSON dataset spec containing the config for exporting .tfrecords.
+* <span style="color:red;font-weight:700;font-size:12px"> -o, --output_filename </span>: The output file name. Note that this will be appended with <span style="color:red;font-weight:700;font-size:12px"> -fold-<num>-of-<total> </span>
 
-* <span style="color:red;font-weight:700;font-size:12px"> -d, --dataset-export-spec:</span> The path to the detection dataset spec containing the config for exporting .tfrecord files
+### Optional Arguments
+* <span style="color:red;font-weight:700;font-size:12px"> -h, --help </span>: Show the help message.
+* <span style="color:red;font-weight:700;font-size:12px"> -m, --mode </span>: This corresponds to the train_data and test_data fields in the spec. The default value is train.
+* <span style="color:red;font-weight:700;font-size:12px"> --check_files </span>: Check if the files, including images and masks, exist in the given root data directory.
+* <span style="color:red;font-weight:700;font-size:12px"> --generate_masks </span>: Generate and save masks of regions with unlabeled people. This is used for training.
 
-* <span style="color:red;font-weight:700;font-size:12px"> -o output_filename:</span> The output filename
-
-* <span style="color:red;font-weight:700;font-size:12px"> -f, –validation-fold:</span> The validation fold in 0-based indexing. This is required when modifying the training set, but otherwise optional.
-
-The required spec file, contains many other arguments, please refer to the [spec file documentation](https://docs.nvidia.com/tao/tao-toolkit/text/object_detection/detectnet_v2.html#creating-a-configuration-file-detectnet-v2) to learn more about them. Some of such parameters refer to the specific location of data folders, which have specific hard coded entries on the spec file, however in the case of an AzureML Job Run, the root directories are unknown as they are assigned dynamically during execution. Then the Component requires to know both the dynamic location during run time and the hard coded location on the spec file to do the substitution on the fly before executing the TAO DetectNet_v2 train. The Component first upgrades the spec files and then passes it to the TAO command during execution.
+The required spec file, contains many other arguments, please refer to the [spec file documentation](https://docs.nvidia.com/tao/tao-toolkit/text/bodypose_estimation/bodyposenet.html#dataset-preparation) to learn more about them. Some of such parameters refer to the specific location of data folders, which have specific hard coded entries on the spec file. However, in the case of an AzureML Job Run, the root directories are unknown before the job runs. Directories are assigned dynamically during execution. Therefore, the Component requires to know both the dynamic location during run time and the hard coded location on the spec file to do the substitution on the fly before executing the TAO bpnet dataset_convert. The Component first updates the spec files and then passes the updated spec files to the TAO command during execution.
 
 ### Required Arguments to be used for spec file substitution
 * <span style="color:red;font-weight:700;font-size:12px">dataset full path:</span> The AzureML location of the dataset to be converted.
 * <span style="color:red;font-weight:700;font-size:12px">dataset reference:</span> The hard coded dataset location on the spec file.
-
-The following example shows how to use the command with the dataset:
-
-<pre style="background-color:rgba(0, 0, 0, 0.0470588)"><font size="2">tao detectnet_v2 dataset_convert  -d < path_to_tfrecords_conversion_spec>
-                                       -o < path_to_output_tfrecords>
-</pre>
+* <span style="color:red;font-weight:700;font-size:12px">annotations full path:</span> The AzureML location of the annotation data.
+* <span style="color:red;font-weight:700;font-size:12px">annotations reference:</span> The hard coded annotation data location on the spec file.
 
 ### Components Inputs and Outputs
 * inputs:
@@ -39,14 +36,7 @@ The following example shows how to use the command with the dataset:
     * dataset_export_spec
     * output_filename
     * specfile_reference_data_dir:
-    * validation_fold
+    * mode
+    * relative_mask_directory
 * outputs:
-    * tf_records_dir
-
-### Components Inputs and Outputs Mapping to TAO Command Parameters
-
-* <span style="color:red;font-weight:700;font-size:12px"> -d, --dataset-export-spec:</span> ${specs_dir}/${dataset_export_spec}
-* <span style="color:red;font-weight:700;font-size:12px"> -o output_filename:</span> ${tf_records_dir}/data/${output_filename}
-* <span style="color:red;font-weight:700;font-size:12px"> -f, –validation-fold:</span> ${validation_fold}
-* <span style="color:red;font-weight:700;font-size:12px">dataset full path:</span> ${data_dir}/data
-* <span style="color:red;font-weight:700;font-size:12px">dataset reference:</span> ${specfile_reference_data_dir}
+    * tf_records_dirå
