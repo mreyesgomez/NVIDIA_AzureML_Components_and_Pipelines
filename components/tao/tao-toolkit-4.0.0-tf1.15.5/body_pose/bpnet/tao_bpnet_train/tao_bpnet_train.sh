@@ -35,3 +35,4 @@ bpnet train -e ${UPDATED_SPECs_DIR}/${SPECS_FILE} -r ${TRAINED_MODEL_DIR}/${MODE
 ls ${UPDATED_SPECs_DIR}
 ls ${TRAINED_MODEL_DIR}
 ls -lh ${TRAINED_MODEL_DIR}/${MODEL_SUBFOLDER}
+sleep infinity

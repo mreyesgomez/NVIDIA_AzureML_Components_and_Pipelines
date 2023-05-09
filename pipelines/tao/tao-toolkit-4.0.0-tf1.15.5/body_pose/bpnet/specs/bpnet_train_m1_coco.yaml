@@ -29,10 +29,10 @@ dataloader:
       channels: 3
     image_encoding: jpg
   dataset_config:
-    root_data_path: /workspace/tao-experiments/bpnet/data/
-    train_records_folder_path: /workspace/tao-experiments/bpnet/data
+    root_data_path: ""
+    train_records_folder_path: /workspace/tao-experiments/bpnet/train/data
     train_records_path: [train-fold-000-of-001]
-    val_records_folder_path: /workspace/tao-experiments/bpnet/data
+    val_records_folder_path: /workspace/tao-experiments/bpnet/val/data
     val_records_path: [val-fold-000-of-001]
     dataset_specs:
       coco: /workspace/examples/bpnet/data_pose_config/coco_spec.json
