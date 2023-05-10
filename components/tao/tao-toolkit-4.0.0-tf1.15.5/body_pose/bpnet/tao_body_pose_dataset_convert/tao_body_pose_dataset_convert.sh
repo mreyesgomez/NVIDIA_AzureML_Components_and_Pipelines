@@ -18,5 +18,5 @@ ls $TF_RECORDS_DIR
 #     ADDITIONAL_ARGS="$ADDITIONAL_ARGS -f ${VALIDATION_FOLD}"
 # fi
 
-echo "bpnet dataset_convert -m $MODE -o $TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/data_pose_config/$DATASET_EXPORT_SPEC"
+echo "bpnet dataset_convert -m $MODE -o $TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC"
 bpnet dataset_convert -m $MODE -o $TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC
