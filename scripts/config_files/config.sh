@@ -26,10 +26,13 @@ resource_group="nv-tme-rg"
 registry_name="hwolff-registry"
 #registry_name="NVIDIA-NGC-Test"
 workspace="tme-demo-ml"
+# vmsize="standard-nc6s-v3"
 nvidia_product="tao"
-container="tao-toolkit-4.0.0-tf1.15.5"
-compute_name="vbagade1"
+container="tao-toolkit-4.0.0-tf1.15.5" # note container name is actually tao-toolkit:4.0.0-tf1.15.5, but a colon is invalid in the request schema
+compute_name="hwolff2"
 product_subfolder="body_pose/bpnet"
+# product_subfolder="object_detection/detectnet_v2"
 #product_subfolder="object_detection/facenet"
 pipeline_path=pipelines/${nvidia_product}/${container}/${product_subfolder}
 num_epochs="4"
+
