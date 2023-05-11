@@ -1,0 +1,45 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+name: tao_body_pose_dataset_convert_and_train
+display_name: tao_body_pose_dataset_convert_and_train
+description: Wrapper for TAO command bpnet dataset_convert. The bpnet app requires the raw input data to be converted to TFRecords for optimized iteration across the data batches, which is accomplish with this component <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_dataset_convert/README.md>Reference file</a>
+version: 20
+type: command
+inputs:
+  specs_dir:
+    type: uri_folder
+  data_dir:
+    type: uri_folder
+  dataset_export_spec:
+    type: string
+    default: coco_spec.json
+  specfile_reference_data_dir:
+    type: string
+    default: data_pose_config
+  train_mode:
+    type: string
+  val_mode:
+    type: string
+  relative_train_mask_directory:
+    type: string
+  relative_val_mask_directory:
+    type: string
+outputs:
+  updated_dir:
+    type: uri_folder
+  tf_records_dir:
+    type: uri_folder
+code: ./
+environment: azureml://registries/hwolff-registry/environments/tao-toolkit-4.0.0-tf1.15.5/versions/2
+command: >-
+  bash ./update_and_convert.sh 
+  ${{inputs.specs_dir}} 
+  ${{inputs.data_dir}} 
+  ${{inputs.dataset_export_spec}} 
+  ${{outputs.tf_records_dir}}
+  ${{inputs.specfile_reference_data_dir}} 
+  ${{inputs.train_mode}}
+  ${{inputs.val_mode}} 
+  ${{inputs.relative_train_mask_directory}}
+  ${{inputs.relative_val_mask_directory}}
+  ${{outputs.updated_dir}}
+
