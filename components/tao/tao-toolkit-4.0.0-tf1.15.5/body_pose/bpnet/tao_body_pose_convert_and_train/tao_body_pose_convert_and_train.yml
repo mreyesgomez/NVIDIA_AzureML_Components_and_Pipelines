@@ -2,12 +2,12 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.jso
 name: tao_body_pose_dataset_convert_and_train
 display_name: tao_body_pose_dataset_convert_and_train
 description: Wrapper for TAO command bpnet dataset_convert. The bpnet app requires the raw input data to be converted to TFRecords for optimized iteration across the data batches, which is accomplish with this component <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_dataset_convert/README.md>Reference file</a>
-version: 36
+version: 45
 type: command
 inputs:
   specs_dir:
     type: uri_folder
-  data_dir:
+  downloaded_data_dir:
     type: uri_folder
   dataset_export_spec:
     type: string
@@ -32,7 +32,7 @@ inputs:
     type: uri_folder
   training_data_subdir:
     type: string
-  specfile_reference_training_data_dir:
+  specfile_reference_root_data_dir:
     type: string
   validation_data_dir:
     type: uri_folder
@@ -42,18 +42,8 @@ inputs:
   specfile_reference_validation_data_dir:
     type: string
     default: ND
-  # training_tf_records_dir:
-  #   type: uri_folder
-  # training_tf_records_subdir:
-  #   type: string
-  #   default: ND
   specfile_reference_training_tf_records_dir:
     type: string
-  # validation_tf_records_dir:
-  #   type: uri_folder
-  # validation_tf_records_subdir:
-  #   type: string
-  #   default: ND
   specfile_reference_validation_tf_records_dir:
     type: string
     default: ND
@@ -99,7 +89,7 @@ inputs:
 outputs:
   updated_dir:
     type: uri_folder
-  tf_records_dir:
+  data_dir:
     type: uri_folder
   trained_model_dir:
     type: uri_folder
@@ -108,9 +98,9 @@ environment: azureml://registries/hwolff-registry/environments/tao-toolkit-4.0.0
 command: >-
   bash ./update_and_convert_and_train.sh 
   ${{inputs.specs_dir}} 
-  ${{inputs.data_dir}} 
+  ${{inputs.downloaded_data_dir}} 
   ${{inputs.dataset_export_spec}} 
-  ${{outputs.tf_records_dir}}
+  ${{outputs.data_dir}}
   ${{inputs.specfile_reference_data_dir}} 
   ${{inputs.train_mode}}
   ${{inputs.val_mode}} 
@@ -120,7 +110,7 @@ command: >-
   ${{inputs.original_train_specs}}
   ${{inputs.specs_file}}
   ${{inputs.num_epochs}}
-  ${{inputs.specfile_reference_training_data_dir}} 
+  ${{inputs.specfile_reference_root_data_dir}} 
   ${{inputs.validation_data_dir}}/${{inputs.validation_data_subdir}}
   ${{inputs.specfile_reference_validation_data_dir}} 
   ${{inputs.specfile_reference_training_tf_records_dir}} 

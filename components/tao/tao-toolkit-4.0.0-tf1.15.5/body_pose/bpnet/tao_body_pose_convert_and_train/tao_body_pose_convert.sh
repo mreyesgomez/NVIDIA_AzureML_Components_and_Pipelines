@@ -6,21 +6,10 @@ export VAL_MODE=$6
 export TRAIN_TF_RECORDS_DIR=$3/$TRAIN_MODE # ends in either train or val -- this determines the name of the file like train-fold-000-of-001
 export VAL_TF_RECORDS_DIR=$4/$VAL_MODE 
 
-# mkdir -p $TF_RECORDS_DIR
-# rm -rf $TF_RECORDS_DIR/*
-
 mkdir -p $TRAIN_TF_RECORDS_DIR
 mkdir -p $VAL_TF_RECORDS_DIR
 
 ls $SPECS_DIR
-# ls $TF_RECORDS_DIR
-
-# export ADDITIONAL_ARGS=""
-
-# if [[ "${VALIDATION_FOLD}" != "ND" ]]
-# then
-#     ADDITIONAL_ARGS="$ADDITIONAL_ARGS -f ${VALIDATION_FOLD}"
-# fi
 
 echo "bpnet dataset_convert -m $TRAIN_MODE -o $TRAIN_TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC"
 bpnet dataset_convert -m $TRAIN_MODE -o $TRAIN_TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC
