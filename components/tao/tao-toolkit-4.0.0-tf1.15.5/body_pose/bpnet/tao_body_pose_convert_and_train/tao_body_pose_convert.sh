@@ -26,5 +26,3 @@ echo "bpnet dataset_convert -m $TRAIN_MODE -o $TRAIN_TF_RECORDS_DIR --generate_m
 bpnet dataset_convert -m $TRAIN_MODE -o $TRAIN_TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC
 echo "bpnet dataset_convert -m $VAL_MODE -o $VAL_TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC"
 bpnet dataset_convert -m $VAL_MODE -o $VAL_TF_RECORDS_DIR --generate_masks --dataset_spec $SPECS_DIR/$DATASET_EXPORT_SPEC
-
-sleep infinity
