@@ -1,15 +1,15 @@
 {
     "dataset": "coco",
-    "root_directory_path": "/workspace/tao-experiments/bpnet/data", 
+    "root_directory_path": "", 
     "train_data": {
         "images_root_dir_path": "train2017",
         "mask_root_dir_path": "train_mask2017",
-        "annotation_root_dir_path": "annotations/person_keypoints_train2017.json"
+        "annotation_root_dir_path": "stupid1"
     },
     "test_data": {
         "images_root_dir_path": "val2017",
         "mask_root_dir_path": "val_mask2017",
-        "annotation_root_dir_path": "annotations/person_keypoints_val2017.json"
+        "annotation_root_dir_path": "stupid2"
     },
     "duplicate_data_with_each_person_as_center": true,
     "categories": [

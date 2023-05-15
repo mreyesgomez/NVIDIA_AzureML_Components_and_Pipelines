@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 657
+version: 665
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
@@ -87,7 +87,7 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}
   dataset_convert_train:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert_and_train/versions/52
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert_and_train/versions/59
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
