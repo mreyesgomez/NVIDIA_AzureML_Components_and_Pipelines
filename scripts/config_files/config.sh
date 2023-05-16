@@ -34,5 +34,5 @@ product_subfolder="body_pose/bpnet"
 # product_subfolder="object_detection/detectnet_v2"
 #product_subfolder="object_detection/facenet"
 pipeline_path=pipelines/${nvidia_product}/${container}/${product_subfolder}
-num_epochs="4"
+num_epochs="1"
 

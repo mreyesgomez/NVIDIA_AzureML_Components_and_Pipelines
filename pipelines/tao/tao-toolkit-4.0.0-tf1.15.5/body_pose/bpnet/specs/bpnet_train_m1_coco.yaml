@@ -1,11 +1,11 @@
 __class_name__: BpNetTrainer
 checkpoint_dir: /workspace/tao-experiments/bpnet/models/exp_m1_unpruned
 log_every_n_secs: 30
-checkpoint_n_epoch: 5
-num_epoch: 20
+checkpoint_n_epoch: 1
+num_epoch: 1
 summary_every_n_steps: 20
 infrequent_summary_every_n_steps: 0
-validation_every_n_epoch: 5
+validation_every_n_epoch: 1
 max_ckpt_to_keep: 100
 random_seed: 42
 pretrained_weights: /workspace/tao-experiments/bpnet/pretrained_model/bodyposenet_vtrainable_v1.0/model.tlt
@@ -29,7 +29,7 @@ dataloader:
       channels: 3
     image_encoding: jpg
   dataset_config:
-    root_data_path: /workspace/tao-experiments/bpnet/data
+    root_data_path: ""
     train_records_folder_path: /workspace/tao-experiments/bpnet/train/data/train-records
     train_records_path: [train-fold-000-of-001]
     val_records_folder_path: /workspace/tao-experiments/bpnet/val/data/val-records
