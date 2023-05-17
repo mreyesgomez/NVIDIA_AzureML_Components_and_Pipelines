@@ -1,0 +1,38 @@
+set -x
+
+# map the output data location to the directory name used by the script
+
+export UPDATED_SPECs_DIR=$1
+export SPECS_FILE=$2
+export TARGET_MODEL_DIR=$3
+export MODEL_SUBFOLDER=$4
+export KEY=$5
+export MODEL_NAME=$6
+export DATA_POSE_SPECS_DIR=$7
+# export FRAMEWORK=${7}
+# export USE_TRAINING_SET=${8} 
+# export GPU_INDEX=${9}
+
+# ADDITIONAL_ARGS=""
+
+# pip install h5py==2.10.0 
+
+# if [[ "${FRAMEWORK}" != "ND" ]]
+# then
+#     ADDITIONAL_ARGS="$ADDITIONAL_ARGS -f $FRAMEWORK"
+# fi
+
+# if [[ "${USE_TRAINING_SET}" != "ND" ]]
+# then
+#     ADDITIONAL_ARGS="$ADDITIONAL_ARGS --use_training_set"
+# fi
+
+# if [[ "${GPU_INDEX}" != "ND" ]]
+# then
+#     ADDITIONAL_ARGS="$ADDITIONAL_ARGS --gpu_index ${GPU_INDEX}"
+# fi
+
+bpnet evaluate --inference_spec ${UPDATED_SPECs_DIR}/${SPECS_FILE} --model_filename ${TARGET_MODEL_DIR}/models/${MODEL_SUBFOLDER}/${MODEL_NAME} --dataset_spec ${DATA_POSE_SPECS_DIR}/coco_spec.json --results_dir ${TARGET_MODEL_DIR}/results/${MODEL_NAME}/eval_default -k $KEY
+sleep infinity
+
+

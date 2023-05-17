@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineComponent.schema.json
 type: pipeline
 name: tao_body_pose_pipeline
-version: 673
+version: 678
 display_name: pipeline component for body pose workflow
 description: Body pose AzureML Pipeline Component using TAO bpnet command components. It executes several actions such as dowmloading data and base model, and model training <a href=https://github.com/mreyesgomez/NVIDIA_AzureML_Components_and_Pipelines/tree/main/components/tao/tfv3.22.05-tf1.15.4/object_detection/detectnet_v2/tao_detectnet_v2_pipeline/README.md>Reference file</a>
 inputs:
@@ -37,6 +37,10 @@ outputs:
   base_model_dir:
     type: uri_folder
   unpruned_model_dir:
+    type: uri_folder
+  updated_infer_spec_dir:
+    type: uri_folder
+  eval_results_dir:
     type: uri_folder
   # pruned_model_dir:
   #   type: uri_folder
@@ -87,7 +91,7 @@ jobs:
       base_model_dir: ${{parent.outputs.base_model_dir}}
   dataset_convert_train:
     type: command
-    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert_and_train/versions/67
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert_and_train/versions/68
     compute: ${{parent.inputs.compute_train_node}}
     inputs:
       specs_dir: ${{parent.inputs.original_specs}}
@@ -120,84 +124,27 @@ jobs:
       # log_file: log_train_base.txt
     outputs:
       data_dir: ${{parent.outputs.data_dir}} #x
-      updated_dir: ${{parent.outputs.updated_spec_dir}} 
-  # dataset_convert_train:
-  #   type: command
-  #   component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/601
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     specs_dir: ${{parent.inputs.original_specs}}
-  #     data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     dataset_export_spec: coco_spec.json
-  #     output_filename: train_mask2017 #not needed
-  #     specfile_reference_data_dir: /workspace/tao-experiments/bpnet/data
-  #     mode: train
-  #     relative_mask_directory: train_mask2017
-  #   outputs:
-  #     tf_records_dir: ${{parent.outputs.tf_records_dir_train}} #x
-  # dataset_convert_val:
-  #   type: command
-  #   component: azureml://registries/hwolff-registry/components/tao_body_pose_dataset_convert/versions/601
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     specs_dir: ${{parent.inputs.original_specs}}
-  #     data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     dataset_export_spec: coco_spec.json
-  #     output_filename: data/val_mask2017 #not needed
-  #     specfile_reference_data_dir: /workspace/tao-experiments/bpnet/data
-  #     mode: val
-  #     relative_mask_directory: val_mask2017
-  #   outputs:
-  #     tf_records_dir: ${{parent.outputs.tf_records_dir_val}} #y
-  # tao_train_base:
-  #   type: command
-  #   component: azureml://registries/hwolff-registry/components/tao_bpnet_train/versions/600
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     num_epochs: ${{parent.inputs.num_epochs}}
-  #     training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     training_data_subdir: data/train2017 #data ?
-  #     specfile_reference_training_data_dir: /workspace/tao-experiments/bpnet/data/
-  #     training_tf_records_dir: ${{parent.jobs.dataset_convert_train.outputs.tf_records_dir}}
-  #     # training_tf_records_subdir: ""
-  #     specfile_reference_training_tf_records_dir: /workspace/tao-experiments/bpnet/train/data
-  #     validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
-  #     validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
-  #     specfile_reference_model_dir: /workspace/tao-experiments/bpnet/pretrained_model/bodyposenet_vtrainable_v1.0/model.tlt
-  #     original_specs: ${{parent.inputs.original_specs}}
-  #     num_gpus: ${{parent.inputs.num_gpus}}
-  #     key: ${{parent.inputs.key}}
-  #     model_name: 'model.tlt'
-  #     model_subfolder: exp_m1_unpruned
-  #     specs_file: bpnet_train_m1_coco.yaml
-  #     specfile_model_pose_dir: /workspace/examples/bpnet/model_pose_config/bpnet_18joints.json
-  #     # log_file: log_train_base.txt
-  #   outputs:
-  #     trained_model_dir: ${{parent.outputs.unpruned_model_dir}}
-  #tao_evaluate_trained_unpruned:
-  #   type: command
-  #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_evaluate/versions/3
-  #   compute: ${{parent.inputs.compute_train_node}}
-  #   inputs:
-  #     training_data_dir: ${{parent.jobs.download_data.outputs.data_dir}}
-  #     training_data_subdir: data/training
-  #     specfile_reference_training_data_dir: /home/jupyter/data/training
-  #     training_tf_records_dir: ${{parent.jobs.dataset_convert.outputs.tf_records_dir}}
-  #     training_tf_records_subdir: data/tfrecords
-  #     specfile_reference_training_tf_records_dir: /home/jupyter/data/tfrecords
-  #     validation_data_dir: ${{parent.inputs.dummy_validation_data_dir}}
-  #     validation_tf_records_dir: ${{parent.inputs.dummy_validation_tf_records_dir}}
-  #     model_app_name: ${{parent.inputs.model_app_name}}
-  #     base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
-  #     specfile_reference_model_dir: /home/jupyter/detectnet_v2
-  #     original_specs: ${{parent.inputs.original_specs}}
-  #     key: ${{parent.inputs.key}}
-  #     model_name: resnet18_detector.tlt
-  #     model_subfolder: experiment_dir_unpruned/weights
-  #     target_model_dir: ${{parent.jobs.tao_train_base.outputs.trained_model_dir}}
-  #     specs_file: detectnet_v2_train_resnet18_kitti.txt
+      updated_dir: ${{parent.outputs.updated_spec_dir}}
+      unpruned_model_dir: ${{parent.outputs.unpruned_model_dir}}
+  tao_evaluate_trained_unpruned:
+    type: command
+    component: azureml://registries/hwolff-registry/components/tao_body_pose_evaluate/versions/4
+    compute: ${{parent.inputs.compute_train_node}}
+    inputs:
+      model_app_name: ${{parent.inputs.model_app_name}}
+      base_model_dir: ${{parent.jobs.download_model.outputs.base_model_dir}}
+      specfile_reference_model_dir: /workspace/notebooks/bpnet/models/exp_m1_unpruned/model.step-0.tlt
+      specfile_reference_train_dir: /workspace/notebooks/bpnet/specs/bpnet_train_m1_coco.yaml
+      original_specs: ${{parent.inputs.original_specs}}
+      key: ${{parent.inputs.key}}
+      model_name: model.tlt
+      model_subfolder: exp_m1_unpruned
+      target_model_dir: ${{parent.jobs.dataset_convert_train.outputs.unpruned_model_dir}}
+      specs_file: infer_spec.yaml
+      train_specs_dir: ${{parent.jobs.dataset_convert_train.outputs.updated_dir}}
+    outputs:
+      updated_infer_spec_dir: ${{parent.outputs.updated_infer_spec_dir}}
+      eval_results_dir: ${{parent.outputs.eval_results_dir}}
   # tao_prune:
   #   type: command
   #   component: azureml://registries/NVIDIA-NGC-Test/components/tao_detectnet_v2_prune/versions/3

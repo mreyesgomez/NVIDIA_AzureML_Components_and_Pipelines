@@ -18,7 +18,7 @@ do
     for (( n=0; n < ${#strarr2[*]}; n++ ))  
     do
       pair="${strarr2[n]}"
-      readarray -d % -t strarr3<<<"$pair"
+      readarray -d : -t strarr3<<<"$pair"
       param1=${strarr3[0]}
       param2=`echo ${strarr3[1]} | sed -e 's/^[[:space:]]*//'`
       echo sed -i '"'s%${param1}%${param2}%g'"' $UPDATED_SPECs_DIR/$FILE_TO_COPY
